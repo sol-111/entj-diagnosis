@@ -4,7 +4,7 @@
 
 # エニアグラム
 
-
+![alt text](image-1.png)
 
 # MBTI
 
