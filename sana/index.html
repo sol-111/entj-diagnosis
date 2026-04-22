@@ -1,0 +1,2285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>INFP-A 総合性格診断</title>
+<style>
+  :root {
+    --bg: #0f0f14;
+    --surface: #1a1a24;
+    --surface2: #22222f;
+    --border: #2a2a3a;
+    --text: #e8e6f0;
+    --text-muted: #8a8a9a;
+    --accent: #f76fa1;
+    --accent2: #a78bfa;
+    --accent-glow: rgba(247,111,161,0.15);
+    --gold: #f5c842;
+    --green: #4ade80;
+    --red: #f87171;
+    --orange: #fb923c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a1028 0%, #0f0f14 50%, #140f1a 100%);
+    padding: 40px 20px 20px; text-align: center;
+    border-bottom: 1px solid var(--border); position: relative; overflow: hidden;
+  }
+  .header::before {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(247,111,161,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(167,139,250,0.06) 0%, transparent 50%);
+    animation: headerGlow 8s ease-in-out infinite alternate;
+  }
+  @keyframes headerGlow { 0% { transform: translate(0,0); } 100% { transform: translate(-5%,3%); } }
+  .header h1 {
+    font-size: 22px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    position: relative; letter-spacing: 0.5px;
+  }
+  .header .sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; position: relative; }
+  .header .types { display: flex; justify-content: center; gap: 12px; margin-top: 14px; position: relative; flex-wrap: wrap; }
+  .type-badge {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .type-badge.main {
+    background: linear-gradient(135deg, rgba(247,111,161,0.2), rgba(247,111,161,0.05));
+    border: 1px solid rgba(247,111,161,0.4); color: var(--accent);
+  }
+  .type-badge.sub2 {
+    background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(167,139,250,0.05));
+    border: 1px solid rgba(167,139,250,0.4); color: var(--accent2);
+  }
+  .type-badge.sub3 {
+    background: linear-gradient(135deg, rgba(245,200,66,0.2), rgba(245,200,66,0.05));
+    border: 1px solid rgba(245,200,66,0.4); color: var(--gold);
+  }
+  .tab-nav {
+    display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100; padding: 0 4px;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 0 0 auto; padding: 12px 16px; font-size: 12px; font-weight: 600;
+    color: var(--text-muted); background: none; border: none;
+    border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer;
+    transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-content { display: none; padding: 20px 16px 100px; }
+  .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  h2 {
+    font-size: 20px; font-weight: 800; margin: 32px 0 16px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    background: linear-gradient(90deg, var(--text), var(--text-muted));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 16px; font-weight: 700; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; font-weight: 700; margin: 18px 0 8px; color: var(--text); }
+  p { margin: 8px 0; }
+  strong { color: #fff; font-weight: 700; }
+  ul, ol { margin: 8px 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; margin: 12px 0;
+  }
+  .card.highlight {
+    border-color: rgba(247,111,161,0.3);
+    background: linear-gradient(135deg, rgba(247,111,161,0.06), var(--surface));
+  }
+  .card.purple {
+    border-color: rgba(167,139,250,0.3);
+    background: linear-gradient(135deg, rgba(167,139,250,0.06), var(--surface));
+  }
+  .card.gold {
+    border-color: rgba(245,200,66,0.3);
+    background: linear-gradient(135deg, rgba(245,200,66,0.06), var(--surface));
+  }
+  .card.green {
+    border-color: rgba(74,222,128,0.3);
+    background: linear-gradient(135deg, rgba(74,222,128,0.06), var(--surface));
+  }
+  .card.red {
+    border-color: rgba(248,113,113,0.3);
+    background: linear-gradient(135deg, rgba(248,113,113,0.06), var(--surface));
+  }
+  .table-wrap { overflow-x: auto; margin: 12px 0; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 280px; }
+  th {
+    background: var(--surface2); color: var(--accent); font-weight: 700; text-align: left;
+    padding: 10px 12px; white-space: nowrap; border-bottom: 2px solid var(--border);
+  }
+  td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .stars { color: var(--gold); letter-spacing: 1px; }
+  .stars-dim { color: #3a3a4a; letter-spacing: 1px; }
+  blockquote {
+    border-left: 3px solid var(--accent); padding: 12px 16px; margin: 16px 0;
+    background: var(--accent-glow); border-radius: 0 8px 8px 0; font-style: italic;
+  }
+  .code-block {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 16px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px;
+    overflow-x: auto; margin: 12px 0; line-height: 1.8; white-space: pre-wrap;
+  }
+  .about-box {
+    background: linear-gradient(135deg, rgba(247,111,161,0.06), rgba(167,139,250,0.04));
+    border: 1px solid rgba(247,111,161,0.2); border-radius: 12px;
+    padding: 14px 16px; margin: 0 0 20px; font-size: 13px; line-height: 1.7;
+  }
+  .about-box .about-title { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 1px; margin-bottom: 6px; }
+  .about-box p { margin: 0; color: var(--text-muted); }
+  .rating { margin: 8px 0; }
+  .rating-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+  .rating-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .rating-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .rating-fill.pink { background: linear-gradient(90deg, var(--accent), #fb7185); }
+  .rating-fill.purple { background: linear-gradient(90deg, var(--accent2), #c4b5fd); }
+  .rating-fill.gold { background: linear-gradient(90deg, var(--gold), #fbbf24); }
+  .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 600; margin: 2px;
+  }
+  .tag.ok { background: rgba(74,222,128,0.15); color: var(--green); }
+  .tag.warn { background: rgba(251,146,60,0.15); color: var(--orange); }
+  .tag.bad { background: rgba(248,113,113,0.15); color: var(--red); }
+  .tag.info { background: rgba(247,111,161,0.15); color: var(--accent); }
+  hr { border: none; height: 1px; background: var(--border); margin: 24px 0; }
+  .footer { text-align: center; padding: 20px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); }
+  .scroll-hint { font-size: 11px; color: var(--text-muted); text-align: center; padding: 6px; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+  .rank-item {
+    display: flex; gap: 14px; padding: 14px; border-radius: 10px; margin: 8px 0;
+    align-items: flex-start; border: 1px solid var(--border); background: var(--surface);
+  }
+  .rank-item.top3 {
+    border-color: rgba(245,200,66,0.3);
+    background: linear-gradient(135deg, rgba(245,200,66,0.04), var(--surface));
+  }
+  .rank-num { font-size: 22px; font-weight: 900; min-width: 36px; text-align: center; line-height: 1.2; }
+  .rank-item.top3 .rank-num { color: var(--gold); }
+  .rank-item:not(.top3) .rank-num { color: var(--text-muted); }
+  .rank-body { flex: 1; }
+  .rank-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .rank-reason { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .rank-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .rank-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-pink { background: rgba(247,111,161,0.15); color: var(--accent); }
+  .tag-purple { background: rgba(167,139,250,0.15); color: var(--accent2); }
+  .tag-gold { background: rgba(245,200,66,0.15); color: var(--gold); }
+  .tag-green { background: rgba(74,222,128,0.15); color: var(--green); }
+  .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 12px 0; }
+  .data-item { font-size: 11px; padding: 6px 10px; background: var(--surface2); border-radius: 6px; }
+  .data-item strong { font-size: 12px; }
+  details.accordion {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    margin: 10px 0; overflow: hidden;
+  }
+  details.accordion[open] { border-color: rgba(247,111,161,0.3); }
+  details.accordion summary {
+    padding: 14px 16px; cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+    font-weight: 700; font-size: 14px; color: #fff;
+    -webkit-user-select: none; user-select: none;
+  }
+  details.accordion summary::-webkit-details-marker { display: none; }
+  details.accordion summary::after {
+    content: '+'; font-size: 18px; color: var(--text-muted); font-weight: 400; transition: transform 0.2s;
+  }
+  details.accordion[open] summary::after { content: '−'; }
+  details.accordion .acc-body { padding: 0 16px 16px; }
+  .ennea-guide-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 12px 16px; margin: 12px 0;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    color: var(--text-muted); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+  }
+  .ennea-guide-toggle:hover { border-color: rgba(247,111,161,0.4); color: var(--text); }
+  .ennea-guide-toggle .arrow { transition: transform 0.3s; font-size: 11px; }
+  .ennea-guide-toggle.open .arrow { transform: rotate(180deg); }
+  .ennea-guide-body {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease, margin 0.3s ease; margin: 0;
+  }
+  .ennea-guide-body.open { max-height: 2000px; margin: 0 0 16px; }
+  .ennea-guide-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .ennea-guide-table th {
+    background: var(--surface2); color: var(--accent); font-weight: 700;
+    text-align: left; padding: 8px 10px; white-space: nowrap;
+    border-bottom: 2px solid var(--border); font-size: 11px;
+  }
+  .ennea-guide-table td {
+    padding: 10px 10px; border-bottom: 1px solid var(--border);
+    vertical-align: top; line-height: 1.5;
+  }
+  .ennea-guide-table tr:last-child td { border-bottom: none; }
+  .ennea-guide-table .etype {
+    font-weight: 900; white-space: nowrap;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .ennea-guide-table .ename { font-weight: 700; color: var(--text); white-space: nowrap; }
+  .ennea-guide-table .edesc { color: var(--text-muted); }
+  .flow-step { padding: 8px 12px; border-radius: 8px; font-size: 13px; margin: 4px 0; }
+  .flow-step.main { background: rgba(247,111,161,0.1); border-left: 3px solid var(--accent); }
+  .flow-step.alt { background: rgba(167,139,250,0.1); border-left: 3px solid var(--accent2); }
+  .flow-step.danger { background: rgba(248,113,113,0.08); border-left: 3px solid #f87171; }
+  .flow-arrow { text-align: center; color: var(--text-muted); font-size: 16px; margin: 2px 0; }
+  .magic-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0; }
+  .magic-bad {
+    padding: 8px 12px; background: rgba(248,113,113,0.08);
+    border: 1px solid rgba(248,113,113,0.2); border-radius: 8px;
+    font-size: 12px; color: var(--text-muted);
+  }
+  .magic-good {
+    padding: 8px 12px; background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.2); border-radius: 8px;
+    font-size: 12px; color: var(--text-muted);
+  }
+  .magic-bad strong { color: #f87171; }
+  .magic-good strong { color: var(--green); }
+  .golden-box {
+    background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 10px; padding: 12px 14px; margin-top: 8px;
+  }
+  .golden-box .title { font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+  .danger-box {
+    background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.2);
+    border-radius: 10px; padding: 12px 14px; margin-top: 8px;
+  }
+  .danger-box .title { font-size: 13px; font-weight: 700; color: var(--red); margin-bottom: 4px; }
+  .type-item {
+    padding: 14px; border-radius: 10px; margin: 8px 0;
+    border: 1px solid var(--border); background: var(--surface);
+  }
+  .type-item .type-num {
+    font-size: 11px; font-weight: 800;
+    color: var(--accent); margin-bottom: 4px; letter-spacing: 1px;
+  }
+  .type-item .type-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .type-item .type-reason { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .type-item .type-evidence {
+    margin-top: 8px; padding: 8px 10px;
+    background: rgba(247,111,161,0.06); border: 1px solid rgba(247,111,161,0.18);
+    border-radius: 8px;
+  }
+  .type-item .type-evidence .ev-label {
+    font-size: 11px; font-weight: 800; color: var(--accent); margin-bottom: 3px;
+  }
+  .type-item .type-evidence .ev-text { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .ending-box {
+    background: linear-gradient(135deg, rgba(247,111,161,0.08), rgba(167,139,250,0.06));
+    border: 1px solid rgba(247,111,161,0.3);
+    border-radius: 14px; padding: 18px; margin-top: 16px; text-align: center;
+  }
+  .ending-box .big {
+    font-size: 18px; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>INFP-A</h1>
+  <div class="sub">総合性格診断レポート</div>
+  <div class="types">
+    <span class="type-badge main">INFP-A</span>
+    <span class="type-badge sub2">IEE-Q</span>
+    <span class="type-badge sub3">射手座</span>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-tab="overview">総合</button>
+  <button class="tab-btn" data-tab="big5">ビッグファイブ</button>
+  <button class="tab-btn" data-tab="enneagram">エニアグラム</button>
+  <button class="tab-btn" data-tab="mbti">MBTI</button>
+  <button class="tab-btn" data-tab="socionics">ソシオニクス</button>
+  <button class="tab-btn" data-tab="love">恋愛タイプ</button>
+  <button class="tab-btn" data-tab="element">星座エレメント</button>
+  <button class="tab-btn" data-tab="horoscope">ホロスコープ</button>
+  <button class="tab-btn" data-tab="stress-map">ストレス＆地雷</button>
+  <button class="tab-btn" data-tab="shadow">影の自己分析</button>
+  <button class="tab-btn" data-tab="infp-self">INFP自己分析</button>
+  <button class="tab-btn" data-tab="career">向いてる仕事</button>
+  <button class="tab-btn" data-tab="my-type">好きなタイプ</button>
+  <button class="tab-btn" data-tab="love-style">恋愛スタイル</button>
+</nav>
+<div class="scroll-hint">← タブをスワイプ →</div>
+
+<!-- =============== TAB: 総合 =============== -->
+<div class="tab-content active" id="overview">
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>MBTI・エニアグラム・ビッグファイブ・ソシオニクス・ホロスコープなど複数の性格診断を横断的に統合し、性格構造・強みと課題を多角的に分析したレポートです。</p>
+  </div>
+
+  <h2>データ一覧</h2>
+  <div class="table-wrap"><table>
+    <tr><th>指標</th><th>結果</th></tr>
+    <tr><td>MBTI</td><td><strong>INFP-A</strong>（主張型・仲介者）</td></tr>
+    <tr><td>ソシオニクス</td><td><strong>IEE-Q</strong>（直観-倫理型外向・探求サブタイプ・デルタ(δ)クワドラ）</td></tr>
+    <tr><td>エニアグラム</td><td><strong>タイプ9w1</strong>（平和主義者+改革者）</td></tr>
+    <tr><td>LobeType</td><td>溺愛系 不思議生命体</td></tr>
+    <tr><td>BIG5タイプ</td><td>EACNO（BIG5-BASIC推定: ENFJ-A）</td></tr>
+    <tr><td>星座</td><td>射手座・火エレメント・柔軟宮</td></tr>
+    <tr><td>出生</td><td>2004/12/16 15:37 埼玉県坂戸市</td></tr>
+  </table></div>
+
+  <h2>ビッグファイブ</h2>
+  <div class="rating">
+    <div class="rating-label"><span>外向性</span><span>54%</span></div>
+    <div class="rating-bar"><div class="rating-fill pink" style="width:54%"></div></div>
+  </div>
+  <div class="rating">
+    <div class="rating-label"><span>協調性</span><span>57%</span></div>
+    <div class="rating-bar"><div class="rating-fill pink" style="width:57%"></div></div>
+  </div>
+  <div class="rating">
+    <div class="rating-label"><span>勤勉性</span><span>77%</span></div>
+    <div class="rating-bar"><div class="rating-fill pink" style="width:77%"></div></div>
+  </div>
+  <div class="rating">
+    <div class="rating-label"><span>情動安定性</span><span>90%</span></div>
+    <div class="rating-bar"><div class="rating-fill pink" style="width:90%"></div></div>
+  </div>
+  <div class="rating">
+    <div class="rating-label"><span>創造性</span><span>58%</span></div>
+    <div class="rating-bar"><div class="rating-fill pink" style="width:58%"></div></div>
+  </div>
+
+  <h2>プロファイル</h2>
+  <blockquote>静かな内面に深い情熱を秘め、世界の調和を願いながら自分の価値観を貫く、揺るぎない平和の守護者</blockquote>
+
+  <h2>性格の核心</h2>
+
+  <div class="card highlight">
+    <h4>1. 驚異的な情動安定性と内なる平穏</h4>
+    <p>情動安定性90%はタイプ9（平和主義者）の本質と完全に一致する。ストレスや対立の中でも感情に飲まれない。INFP-Aの「A（Assertive）」が示す通り、自分の価値観に対する揺るぎない信頼がある。不安を感じにくく、自分のペースを崩されない。</p>
+  </div>
+
+  <div class="card highlight">
+    <h4>2. 真面目さと誠実さの勤勉性77%</h4>
+    <p>勤勉性77%はINFPとしては非常に高い水準。タイプ9w1の「1ウィング（改革者）」が勤勉性を底上げしている。「やると決めたことはきちんとやる」という内的な倫理基準が行動を支えている。IEE-QのTe役割機能（3番）も「効率的にこなさねば」という意識として現れる。</p>
+  </div>
+
+  <div class="card highlight">
+    <h4>3. Fi主導の深い価値観世界</h4>
+    <p>INFPのFi（内向的感情）が主導機能。自分の中に確固たる価値観の体系を持ち、それに基づいて世界を見る。IEEのFi創造機能（2番）と合わさり、「人間関係の倫理」「何が本当に大切か」を直感的に見抜く力がある。言語化しなくても、善悪や美醜を深いレベルで感じ取る。</p>
+  </div>
+
+  <div class="card highlight">
+    <h4>4. 射手座の自由と探求心</h4>
+    <p>太陽射手座24°・8ハウス。表面は穏やかだが、内面には「もっと知りたい」「もっと遠くへ行きたい」という強烈な探求欲がある。IEEのNe主導（可能性の拡散）と射手座の「真理への渇望」が共鳴し、一つの枠に収まることを本能的に嫌う。</p>
+  </div>
+
+  <div class="card highlight">
+    <h4>5. 穏やかな仮面の下の灼熱——金星・火星さそり座</h4>
+    <p>金星さそり座8°・火星さそり座20°、共に7ハウス。パートナーシップにおいて極めて深い結びつきを求める。表面のタイプ9的穏やかさの奥に、さそり座的な「全か無か」の激しい感情がある。一度信頼した相手には底知れない献身を見せるが、裏切りには徹底的に心を閉ざす。</p>
+  </div>
+
+  <h2>弱点</h2>
+  <div class="table-wrap"><table>
+    <tr><th>弱点</th><th>具体的な現れ方</th></tr>
+    <tr><td>自己主張の回避</td><td>タイプ9の本質的傾向。自分の意見・欲求を抑えて相手に合わせる</td></tr>
+    <tr><td>優柔不断</td><td>Ne主導（可能性が多すぎる）× タイプ9（対立を避けたい）で決断が遅れる</td></tr>
+    <tr><td>現実のディテールが苦手</td><td>IEEのSi苦点機能（4番）。体調管理・ルーティンが崩れやすい</td></tr>
+    <tr><td>「怒れない」問題</td><td>タイプ9は怒りを抑圧する。不満を溜め込み、突然爆発するか完全に離れる</td></tr>
+    <tr><td>Te劣等の壁</td><td>INFPの劣等機能Te。効率的な計画立案・客観的な評価基準の構築が苦手</td></tr>
+    <tr><td>理想と現実のギャップ</td><td>Fiの高い理想と現実が合わないとき、深く失望する</td></tr>
+  </table></div>
+
+  <h2>ホロスコープ深層</h2>
+  <div class="card highlight">
+    <div class="table-wrap"><table>
+      <tr><th>天体</th><th>位置</th><th>意味</th></tr>
+      <tr><td>太陽</td><td>射手座24° 8H</td><td>深層心理・変容の場で自由と真理を追求する</td></tr>
+      <tr><td>月</td><td>獅子座17° 4H</td><td>家庭・ルーツの中に「自分を表現したい」という情熱</td></tr>
+      <tr><td>金星</td><td>さそり座8° 7H</td><td>パートナーシップに深い一体感を求める。浅い関係は耐えられない</td></tr>
+      <tr><td>火星</td><td>さそり座20° 7H</td><td>パートナーのために全力で戦う。関係性に対して徹底的</td></tr>
+      <tr><td>ASC</td><td>牡牛座26°</td><td>第一印象は穏やかで安定感がある。安心を与える存在</td></tr>
+      <tr><td>MC</td><td>水瓶座7°</td><td>革新的・独自の道で社会に貢献することが人生の到達点</td></tr>
+    </table></div>
+  </div>
+  <blockquote>牡牛座ASCの穏やかな安心感、射手座太陽の自由な探求心、獅子座月の表現欲求、さそり座の金星・火星が持つ深い情熱——表面は春の陽だまり、内面は灼熱のマグマ</blockquote>
+
+  <h2>総括</h2>
+  <blockquote>
+    外見は牡牛座ASCの穏やかさとタイプ9の調和的な空気。中身はINFPのFi主導による確固たる価値観の世界。核心にはさそり座の金星・火星が持つ底知れない感情の深さ。<br><br>
+    「何も考えていなさそう」に見えるが、実は誰よりも深く感じ、誰よりも強い価値観を持っている。「優しいだけの人」に見えるが、自分の信念を裏切ることは絶対にしない。「争いを嫌う」のは弱さではなく、本当に大切なもののためにエネルギーを温存しているから。<br><br>
+    <strong>「この人が本気で怒ったら、もう取り返しがつかない」——その静かな迫力こそが、穏やかさの正体。</strong>
+  </blockquote>
+
+  <h2>一言プロファイル</h2>
+  <div class="card gold">
+    <p><strong>「穏やかな仮面の下に灼熱の情熱を秘めた、揺るぎない平和の守護者。唯一の弱点は、自分の本当の願いを他者のために後回しにしすぎること。」</strong></p>
+    <p style="font-size:13px;color:var(--text-muted);margin-top:8px;">INFP的な深い内面世界、IEEの可能性を見出す力、タイプ9の調和への渇望、射手座の自由への衝動——全てが「世界の美しさを守りたい」に向かう。だが「自分自身も守っていい」ということを忘れがち。</p>
+  </div>
+
+  <hr>
+
+  <h2>最強相性 TOP5</h2>
+  <div class="about-box">
+    <div class="about-title">ランキング基準</div>
+    <p>MBTI・ソシオニクス・エニアグラム・ビッグファイブ・恋愛タイプ・ホロスコープの全データを統合し、「足りないものを自然に補える相手」を逆算した忖度なしランキング。</p>
+  </div>
+  <h3>足りないものから逆算する</h3>
+  <div class="table-wrap"><table>
+    <tr><th>弱点</th><th>根拠</th><th>必要な相手の機能</th></tr>
+    <tr><td>自己主張・決断力</td><td>タイプ9の対立回避 / INFP的優柔不断</td><td><strong>Te主導 or Fe主導</strong>（引っ張ってくれる力）</td></tr>
+    <tr><td>現実の管理能力</td><td>IEEの苦点機能Si（4番）</td><td><strong>Si主導 or 補助</strong>（生活を安定させる力）</td></tr>
+    <tr><td>客観的な評価基準</td><td>INFPの劣等機能Te</td><td><strong>Te主導 or 補助</strong></td></tr>
+    <tr><td>感情の言語化サポート</td><td>タイプ9は自分の感情を抑圧する</td><td>Feが強く、感情を引き出せる相手</td></tr>
+    <tr><td>深い感情的コミット</td><td>金星・火星さそり座7H</td><td>浅い関係では満足できない → 深い絆を作れる相手</td></tr>
+  </table></div>
+
+  <h3>総合ランキング</h3>
+  <div class="table-wrap"><table>
+    <tr><th>順位</th><th>MBTI</th><th>スコア</th><th>知性</th><th>感情</th><th>恋愛</th><th>長期</th></tr>
+    <tr><td><strong>1</strong></td><td><strong>ENFJ</strong></td><td><strong>98</strong></td><td>★★★★☆</td><td>★★★★★</td><td>★★★★★</td><td>★★★★★</td></tr>
+    <tr><td><strong>2</strong></td><td><strong>ENTJ</strong></td><td><strong>88</strong></td><td>★★★★★</td><td>★★★☆☆</td><td>★★★★☆</td><td>★★★★★</td></tr>
+    <tr><td><strong>3</strong></td><td><strong>INFJ</strong></td><td><strong>82</strong></td><td>★★★★☆</td><td>★★★★★</td><td>★★★★☆</td><td>★★★★☆</td></tr>
+    <tr><td><strong>4</strong></td><td><strong>ISFJ</strong></td><td><strong>78</strong></td><td>★★★☆☆</td><td>★★★★☆</td><td>★★★★☆</td><td>★★★★★</td></tr>
+    <tr><td><strong>5</strong></td><td><strong>ENFP</strong></td><td><strong>72</strong></td><td>★★★★☆</td><td>★★★★☆</td><td>★★★☆☆</td><td>★★★☆☆</td></tr>
+  </table></div>
+
+  <details class="accordion">
+    <summary>第1位：ENFJ（主人公）<span class="tag ok" style="margin-left:8px;">98/100</span></summary>
+    <div class="acc-body">
+      <p><strong>「INFPの内なる世界に光を当て、自分でも気づかなかった感情を言葉にしてくれる、太陽のような存在。」</strong></p>
+      <div class="code-block">MBTI：INFP × ENFJ ＝ "黄金ペア"（Golden Pair）
+→ Fi-Ne × Fe-Ni の理想的な補完関係</div>
+      <div class="table-wrap"><table>
+        <tr><th>弱点</th><th>ENFJが提供</th><th>機能的根拠</th></tr>
+        <tr><td>自己主張ができない</td><td><strong>Fe主導</strong>で感情を引き出し言語化</td><td>ENFJのFe主導がINFPの抑圧されたFiを安全に解放する</td></tr>
+        <tr><td>決断が遅い</td><td><strong>Ni補助</strong>で方向性を示す</td><td>「こっちに行こう」と自然にリードしてくれる</td></tr>
+        <tr><td>Te劣等（効率・計画）</td><td>Te第三機能で適度にサポート</td><td>押しつけずに「こうすると良いかも」レベルの提案</td></tr>
+        <tr><td>深い感情的絆を求める</td><td>Fe×Niで深い共感的理解</td><td>さそり座金星・火星の「全か無か」に応えられる深さ</td></tr>
+      </table></div>
+      <h4>逆方向も強力</h4>
+      <div class="table-wrap"><table>
+        <tr><th>ENFJの弱点</th><th>提供するもの</th></tr>
+        <tr><td>他者に尽くしすぎる</td><td><strong>Fi主導</strong>が「自分の気持ちも大切に」と教える</td></tr>
+        <tr><td>Se第三の暴走</td><td>穏やかなタイプ9の空気が安定剤になる</td></tr>
+        <tr><td>自分の本心を見失う</td><td>Fiの誠実さが「本当の自分」に立ち返らせる</td></tr>
+      </table></div>
+      <p><span class="tag warn">注意</span> ENFJのリードがタイプ9の「合わせすぎ」を助長するリスク。ENFJ側が「本音を言ってほしい」と感じる場面が出る。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>第2位：ENTJ（指揮官）<span class="tag ok" style="margin-left:8px;">88/100</span></summary>
+    <div class="acc-body">
+      <p><strong>「INFPの劣等Teを最も直接的に補完する、強力な実行者。夢を現実にする力を持つ。」</strong></p>
+      <div class="code-block">MBTI：INFP × ENTJ ＝ "補完ペア"
+→ Fi-Ne × Te-Ni の対角線的補完。最も足りない機能を最も強く持つ</div>
+      <div class="table-wrap"><table>
+        <tr><th>弱点</th><th>ENTJが提供</th><th>機能的根拠</th></tr>
+        <tr><td>Te劣等（計画・実行・効率）</td><td><strong>Te主導</strong>（全タイプ最強のTe）</td><td>INFPの最も弱い機能を全力で補う</td></tr>
+        <tr><td>優柔不断</td><td>即断即決のリーダーシップ</td><td>「これでいく」の決断力</td></tr>
+        <tr><td>理想を形にできない</td><td>理想を実行計画に変換する力</td><td>Ni補助×Te主導の戦略構築</td></tr>
+      </table></div>
+      <p><span class="tag warn">注意</span> Te主導がFi主導を「非効率」と切り捨てるリスク。ENTJが支配的になるとタイプ9は表面上従うが内面では離れていく。</p>
+      <p><span class="tag ok">好材料</span> さそり座の金星・火星が「強い相手」への憧れを生む。ENTJの力強さに惹かれやすい構造がある。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>第3位：INFJ（提唱者）<span class="tag ok" style="margin-left:8px;">82/100</span></summary>
+    <div class="acc-body">
+      <p><strong>「言葉がなくても通じ合える、魂のレベルの共鳴。静かだが底知れなく深い絆。」</strong></p>
+      <div class="table-wrap"><table>
+        <tr><th>弱点</th><th>INFJが提供</th></tr>
+        <tr><td>Ni（長期ビジョン）がNeで拡散する</td><td><strong>Ni主導</strong>で方向性を収束させる</td></tr>
+        <tr><td>感情を抑圧してしまう</td><td><strong>Fe補助</strong>で感情の言語化を助ける</td></tr>
+        <tr><td>深い感情的絆を求める</td><td>Ni×Feの深い共感。さそり座的な深さに応えられる</td></tr>
+      </table></div>
+      <p><span class="tag warn">注意</span> 両者とも内向的で優柔不断。「2人とも決められない」状態に陥りやすい。外部のストレスに対する耐性が低くなりがち。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>第4位：ISFJ（擁護者）<span class="tag warn" style="margin-left:8px;">78/100</span></summary>
+    <div class="acc-body">
+      <p><strong>「IEEのソシオニクス双対（SLI相当）。生活基盤を安定させ、内面世界を安心して広げさせてくれる。」</strong></p>
+      <div class="code-block">ソシオニクス：IEE × SLI ＝ 双対関係（Дуальные）
+→ SLI（ISFJ相当）はIEEにとって最も自然に補完し合えるタイプ</div>
+      <div class="table-wrap"><table>
+        <tr><th>弱点</th><th>ISFJが提供</th><th>機能的根拠</th></tr>
+        <tr><td>Si苦点（生活管理）</td><td><strong>Si主導</strong>（全タイプ最強のSi）</td><td>IEE 4番 → SLI 1番が直接供給</td></tr>
+        <tr><td>Te劣等（効率）</td><td><strong>Te補助</strong>で実務を淡々とこなす</td><td>押しつけない現実的サポート</td></tr>
+        <tr><td>日常のルーティンが崩れる</td><td>安定した生活基盤を自然に作る</td><td>Si主導が安全で心地よい環境を構築</td></tr>
+      </table></div>
+      <p><span class="tag warn">注意</span> 射手座太陽の「自由と冒険」がISFJの安定志向と衝突する場面がある。ISFJが「退屈」に感じられるリスク。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>第5位：ENFP（運動家）<span class="tag warn" style="margin-left:8px;">72/100</span></summary>
+    <div class="acc-body">
+      <p><strong>「ソシオニクスの同一関係。誰よりも深く理解し合えるが、補完が少ない鏡のような存在。」</strong></p>
+      <div class="code-block">ソシオニクス：IEE × IEE ＝ 同一関係（Тождество）
+→ 思考回路が同じなので即座に理解し合えるが、弱点も同じ</div>
+      <div class="table-wrap"><table>
+        <tr><th>特性</th><th>ENFPとの噛み合い</th></tr>
+        <tr><td>Ne主導の発想力</td><td>Ne×Neで無限の可能性が広がる。話が尽きない</td></tr>
+        <tr><td>Fi的価値観の共有</td><td>両者Fi重視で「大切なもの」が似ている</td></tr>
+        <tr><td>射手座的冒険心</td><td>ENFPの外向的エネルギーが行動を後押し</td></tr>
+      </table></div>
+      <p><span class="tag bad">最大リスク</span> Si苦点×2＝生活崩壊。Te劣等×2＝計画不在。楽しいけれど現実が崩れていく（深刻度★★★★☆）。</p>
+    </div>
+  </details>
+
+  <blockquote>
+    ENFJが1位なのは、INFP×ENFJの「黄金ペア」関係が根拠。<br><br>
+    最も足りない「自己主張・感情の言語化」と「方向性のリード」をFe主導×Ni補助で自然に供給できる唯一のタイプ。さそり座金星・火星の「深い絆への渇望」にも応えられる深さを持つ。
+  </blockquote>
+
+  <hr>
+
+  <h2>相性 WORST5</h2>
+  <blockquote>全診断データを総合した忖度なしワースト順位。</blockquote>
+
+  <h3>ワースト総合ランキング</h3>
+  <div class="table-wrap"><table>
+    <tr><th>順位</th><th>MBTI</th><th>スコア</th><th>知性</th><th>感情</th><th>恋愛</th><th>摩耗</th></tr>
+    <tr><td><strong>W1</strong></td><td><strong>ESTJ</strong></td><td><strong>20</strong></td><td>★★★★★</td><td>★★★★★</td><td>★★★★★</td><td>★★★★★</td></tr>
+    <tr><td><strong>W2</strong></td><td><strong>ESTP</strong></td><td><strong>28</strong></td><td>★★★☆☆</td><td>★★★★★</td><td>★★★★☆</td><td>★★★★★</td></tr>
+    <tr><td><strong>W3</strong></td><td><strong>ISTJ</strong></td><td><strong>32</strong></td><td>★★★★☆</td><td>★★★★☆</td><td>★★★★☆</td><td>★★★★☆</td></tr>
+    <tr><td><strong>W4</strong></td><td><strong>ESFP</strong></td><td><strong>38</strong></td><td>★★★☆☆</td><td>★★★★☆</td><td>★★★☆☆</td><td>★★★★☆</td></tr>
+    <tr><td><strong>W5</strong></td><td><strong>ISTP</strong></td><td><strong>42</strong></td><td>★★★★☆</td><td>★★★★★</td><td>★★★☆☆</td><td>★★★★☆</td></tr>
+  </table></div>
+
+  <details class="accordion"><summary>W1：ESTJ（幹部）<span class="tag bad" style="margin-left:8px;">20/100</span></summary><div class="acc-body"><p><strong>「IEEにとって超自我関係。Te-Si主導がFi-Neの内面世界を"非効率"として全否定する。」</strong></p><div class="code-block">ソシオニクス：IEE × LSE ＝ 超自我関係（Суперэго）
+→ お互いの最も弱い部分を、善意で踏み抜く構造</div><div class="table-wrap"><table><tr><th>構造</th><th>ESTJがやること</th><th>結果</th></tr><tr><td>Fi創造（2番）が大切にする内面</td><td><strong>Te主導</strong>で「結果は？」「効率は？」と問い詰める</td><td>最も大切な価値観世界を否定される</td></tr><tr><td>Ne主導の可能性探求</td><td><strong>Si補助</strong>で「前例は？」「実績は？」と縛る</td><td>自由な発想が「空想」として切り捨てられる</td></tr><tr><td>タイプ9の「争いたくない」</td><td>ESTJの管理・命令スタイル</td><td>表面上従うが内面で完全に離れる → 関係の形骸化</td></tr></table></div></div></details>
+
+  <details class="accordion"><summary>W2：ESTP（起業家）<span class="tag bad" style="margin-left:8px;">28/100</span></summary><div class="acc-body"><p><strong>「IEEにとって衝突関係。Se-Ti主導が価値観の根本で対立し、理解の糸口がない。」</strong></p><div class="code-block">ソシオニクス：IEE × SLE ＝ 衝突関係（Конфликт）
+→ 16タイプ間関係の中で「最悪の相性」と定義される関係</div><div class="table-wrap"><table><tr><th>衝突ポイント</th><th>メカニズム</th></tr><tr><td>Ne vs Se</td><td>「可能性を広げたい」vs「今ここで結果を出せ」</td></tr><tr><td>Fi vs Ti</td><td>「人の気持ちが大事」vs「論理が正しければそれでいい」</td></tr><tr><td>コミュニケーション</td><td>INFPの繊細な表現をESTPが「まどろっこしい」と一蹴</td></tr></table></div></div></details>
+
+  <details class="accordion"><summary>W3：ISTJ（管理者）<span class="tag bad" style="margin-left:8px;">32/100</span></summary><div class="acc-body"><p><strong>「Si-Te主導がINFPの内面世界を"非現実的"と切り捨て、想像力の翼をもぎ取る。」</strong></p><div class="table-wrap"><table><tr><th>特性</th><th>ISTJとの衝突</th></tr><tr><td>Ne主導（未来の可能性）</td><td>Si主導が「前例がない」「現実的じゃない」と否定</td></tr><tr><td>Fi的な価値判断</td><td>Te補助が「感情で判断するな」と抑制</td></tr><tr><td>タイプ9の「自由にやりたい」</td><td>ISTJの「ルール通りにやるべき」が窒息感を生む</td></tr></table></div></div></details>
+
+  <details class="accordion"><summary>W4：ESFP（エンターテイナー）<span class="tag bad" style="margin-left:8px;">38/100</span></summary><div class="acc-body"><p><strong>「Se主導の圧倒的な外向エネルギーが、INFPの静かな内面世界を踏み荒らす。」</strong></p><div class="table-wrap"><table><tr><th>衝突ポイント</th><th>メカニズム</th></tr><tr><td>Se主導 vs Ne主導</td><td>「今を楽しもう！」vs「可能性を静かに考えたい」</td></tr><tr><td>外向的刺激追求</td><td>INFPの内向的な回復時間を「暗い」「ノリが悪い」と批判</td></tr><tr><td>感情の深さの違い</td><td>さそり座金星・火星の深い絆 vs ESFPの広く浅い人間関係</td></tr></table></div></div></details>
+
+  <details class="accordion"><summary>W5：ISTP（巨匠）<span class="tag bad" style="margin-left:8px;">42/100</span></summary><div class="acc-body"><p><strong>「Ti-Se主導で感情面が壊滅的に噛み合わない。論理の冷たさがFiの世界を凍らせる。」</strong></p><div class="table-wrap"><table><tr><th>特性</th><th>ISTPとの衝突</th></tr><tr><td>Fi主導（感情・価値観）</td><td>Ti主導が「論理的に正しいかどうか」だけで判断</td></tr><tr><td>感情の言語化を求める</td><td>ISTPは感情表現が極めて苦手</td></tr><tr><td>さそり座的な深い絆</td><td>ISTPの感情的距離感がさそり座金星を深く傷つける</td></tr></table></div></div></details>
+
+  <blockquote>ベストが「自然体で内面世界を守りながら補完し合える」関係なら、ワーストは「内面世界を"非効率"か"非現実的"として否定される」関係。INFPにとって最も致命的なのは、Fi的価値観の世界を理解しようとしない相手。</blockquote>
+
+</div>
+
+<!-- =============== TAB: ビッグファイブ =============== -->
+<div class="tab-content" id="big5">
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>性格を「外向性・協調性・勤勉性・情動安定性・創造性」の5つの軸でスコア化する、心理学で最も科学的根拠が強い性格モデルです。性格傾向が数値で客観的にわかります。</p>
+  </div>
+  <h2>ビッグファイブ</h2>
+  <div class="card highlight">
+    <div style="font-size:12px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:8px;">INFP-A / EACNO / IEE-Q / タイプ9w1</div>
+    <div class="rating">
+      <div class="rating-label"><span>外向性</span><span>54%</span></div>
+      <div class="rating-bar"><div class="rating-fill pink" style="width:54%"></div></div>
+    </div>
+    <div class="rating">
+      <div class="rating-label"><span>協調性</span><span>57%</span></div>
+      <div class="rating-bar"><div class="rating-fill pink" style="width:57%"></div></div>
+    </div>
+    <div class="rating">
+      <div class="rating-label"><span>勤勉性</span><span>77%</span></div>
+      <div class="rating-bar"><div class="rating-fill pink" style="width:77%"></div></div>
+    </div>
+    <div class="rating">
+      <div class="rating-label"><span>情動安定性</span><span>90%</span></div>
+      <div class="rating-bar"><div class="rating-fill pink" style="width:90%"></div></div>
+    </div>
+    <div class="rating">
+      <div class="rating-label"><span>創造性</span><span>58%</span></div>
+      <div class="rating-bar"><div class="rating-fill pink" style="width:58%"></div></div>
+    </div>
+  </div>
+  <blockquote>穏やかに調和を保ちながら、確固たる価値観と驚異的な精神安定で自分の道を歩む</blockquote>
+
+  <div class="table-wrap"><table>
+    <tr><th>特性</th><th>スコア</th><th>方向性</th></tr>
+    <tr><td>外向性</td><td><strong>54%</strong></td><td>ほぼ中間（やや外向寄り）</td></tr>
+    <tr><td>協調性</td><td><strong>57%</strong></td><td>やや協調的</td></tr>
+    <tr><td>勤勉性</td><td><strong>77%</strong></td><td>高い勤勉性</td></tr>
+    <tr><td>情動安定性</td><td><strong>90%</strong></td><td>極めて安定</td></tr>
+    <tr><td>創造性</td><td><strong>58%</strong></td><td>やや高め</td></tr>
+  </table></div>
+
+  <h3>統合プロファイル</h3>
+  <div class="card">
+    <div class="table-wrap"><table>
+      <tr><th>指標</th><th>結果</th></tr>
+      <tr><td>MBTI</td><td>INFP-A（主張型・仲介者）</td></tr>
+      <tr><td>ビッグファイブタイプ</td><td>EACNO</td></tr>
+      <tr><td>ソシオニクス</td><td>IEE-Q</td></tr>
+      <tr><td>LobeType</td><td>溺愛系 不思議生命体</td></tr>
+      <tr><td>エニアグラム主体</td><td>タイプ9w1（平和主義者+改革者）</td></tr>
+    </table></div>
+  </div>
+
+  <h2>各特性の深掘り</h2>
+
+  <h3>外向性 54%</h3>
+  <div class="card highlight">
+    <p>外向性54%はほぼ中間。場面によって外向にも内向にも振れる「アンビバート」的な特性。IEE（外向型）の明るさを持ちつつ、INFP（内向型）の内省も併せ持つ、このタイプならではのバランス。</p>
+    <p><strong>IEEとの一致：</strong>Ne主導は新しい人や可能性に対して開かれているが、Fi創造機能（2番）が「本当に信頼できる人」と「それ以外」を明確に分ける。結果として<strong>「広く浅くは付き合えるが、エネルギーを注ぐのは本当に大切な人だけ」</strong>という構造になる。</p>
+  </div>
+
+  <h3>協調性 57%</h3>
+  <div class="card highlight">
+    <p>やや協調的。タイプ9（平和主義者）の「調和を保ちたい」という本質が協調性を底上げしている。ただし57%は「何でも合わせる」レベルではなく、<strong>Fi主導が「ここだけは譲れない」というラインを持っている</strong>。</p>
+    <p>INFPとしては標準的な水準。「優しくて合わせてくれるように見えるが、価値観に反することは静かに拒否する」——この<strong>「柔らかい断固さ」</strong>が協調性57%の正体。</p>
+  </div>
+
+  <h3>勤勉性 77%</h3>
+  <div class="card highlight">
+    <p>INFPとしては非常に高い水準。一般的なINFPは勤勉性が低めだが、タイプ9w1の「1ウィング」が<strong>「やるべきことはきちんとやる」</strong>という内的な規律を与えている。</p>
+    <p><strong>IEEのTe役割機能（3番）との関係：</strong>Te（効率・計画）は役割機能なので「できるけど消耗する」立ち位置。勤勉性77%の高さは、Te的な「効率」よりもFi的な<strong>「誠実さ」「約束を守る」「自分の基準に恥じない行動をする」</strong>から来ている。</p>
+  </div>
+
+  <h3>情動安定性 90%</h3>
+  <div class="card gold">
+    <p><strong>全指標中で最も特筆すべきスコア。</strong>統計的に上位10%。感情に振り回されず、安定した内面を保てる。INFP-Aの「A（Assertive）」が最大限に発動した状態。</p>
+    <p>タイプ9の「内なる平穏」と完全に一致。<strong>「不安を感じにくい」「後悔しにくい」「他人の感情に巻き込まれにくい」</strong>とほぼ同義。</p>
+    <p style="color:var(--orange);font-size:13px;margin-top:8px;"><strong>注意：</strong>安定しすぎることのリスク。タイプ9特有の「怒りの抑圧」と合わさると、不満や怒りの蓄積に気づけない。ストレスが限界を超えたとき、タイプ6方向（不安・疑心暗鬼）への突然の分裂が起きやすい。</p>
+  </div>
+
+  <h3>創造性 58%</h3>
+  <div class="card highlight">
+    <p>やや高め。INFPの主導機能Fi＋補助機能Neから想像される「高い創造性」と比べるとやや控えめに見えるが、これはIEEのNe主導が<strong>「発散的な創造性」（アイデアを無限に広げる）</strong>タイプであるため。</p>
+    <p>BIG5の創造性は「芸術的感受性・新しい体験への開放性」を測っており、Neの「可能性の探求」とは少しズレがある。実際の創造性は<strong>Fi×Neの組み合わせで、「独自の世界観を構築する」</strong>方向に強く発揮される。58%は「新しいもの好きだが、それを自分の価値観フィルターを通して取り入れる」構造を反映している。</p>
+  </div>
+
+  <h2>BIG5推定MBTIとのズレ</h2>
+  <div class="card">
+    <p>BIG5-BASICはこのスコアから<strong>ENFJ-A</strong>を推定——実際のMBTIはINFP-A。このズレには構造的な意味がある。</p>
+    <p>外向性54%がE判定、協調性57%がF（Feeling）判定に引っ張られ、勤勉性77%がJ判定を生んでいる。つまり<strong>「外から見た行動パターン」はENFJ的</strong>に見えるが、<strong>「内面の動機」はINFP</strong>。</p>
+    <p style="margin-top:8px;">これはまさにIEE（外向型）とINFP（内向型）の二重構造。<strong>「社交的で面倒見が良く見えるが、エネルギー源は自分の内面世界にある」</strong>——このギャップが周囲を驚かせることがある。</p>
+  </div>
+
+  <h2>総括</h2>
+  <blockquote>情動安定90% × 勤勉性77%が作る「揺るぎない内面と誠実な行動」。外向性54%の絶妙なバランスは、人と繋がれるが一人の時間も大切にできる証拠。BIG5推定がENFJ-Aになるほど「外向的に振る舞える内向型」——これがINFP×IEEの二重構造の正体。</blockquote>
+
+</div>
+
+<!-- =============== TAB: エニアグラム =============== -->
+<div class="tab-content" id="enneagram">
+
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>人の根本的な動機・恐れ・欲求を9つのタイプで分類する性格類型論です。「なぜそう行動するのか」という内面の動機がわかり、ストレス時や成長時の変化パターンが見えてきます。</p>
+  </div>
+
+  <h2>エニアグラムスコア</h2>
+
+  <button class="ennea-guide-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+    <span>タイプ早見表を見る</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="ennea-guide-body">
+    <div class="table-wrap">
+    <table class="ennea-guide-table">
+      <tr><th>タイプ</th><th>名称</th><th>特徴</th></tr>
+      <tr>
+        <td class="etype">1</td>
+        <td class="ename">改革者</td>
+        <td class="edesc">「正しくありたい」が原動力。高い理想と倫理観を持ち、物事を改善しようとする完璧主義者。自分にも他人にも厳しく、妥協を嫌う。責任感が強く信頼されるが、批判的になりやすい面も。</td>
+      </tr>
+      <tr>
+        <td class="etype">2</td>
+        <td class="ename">援助者</td>
+        <td class="edesc">「人の役に立ちたい」が原動力。共感力が高く、他者のニーズを察して献身的にサポートする。愛情深く温かいが、自分の欲求を後回しにしがち。感謝されないと不満を溜め込むことも。</td>
+      </tr>
+      <tr>
+        <td class="etype">3</td>
+        <td class="ename">達成者</td>
+        <td class="edesc">「成功して認められたい」が原動力。目標に向かって効率的に動き、結果を出す実力派。適応力が高く自信に満ちているが、成果＝自分の価値と捉えすぎると、本当の自分を見失うことがある。</td>
+      </tr>
+      <tr>
+        <td class="etype">4</td>
+        <td class="ename">個人主義者</td>
+        <td class="edesc">「自分らしくありたい」が原動力。豊かな感受性と独自の美意識を持つクリエイティブな人。深い感情体験を大切にし、平凡を嫌う。自分だけが理解されていないと感じやすく、気分の波が大きい。</td>
+      </tr>
+      <tr>
+        <td class="etype">5</td>
+        <td class="ename">調査者</td>
+        <td class="edesc">「知りたい・理解したい」が原動力。観察力と分析力に優れ、知識を深く掘り下げる思考家。自分の世界を大切にし、一人の時間を必要とする。感情表現や社交に消耗しやすく、距離を取りがち。</td>
+      </tr>
+      <tr>
+        <td class="etype">6</td>
+        <td class="ename">忠実な人</td>
+        <td class="edesc">「安全でありたい」が原動力。慎重でリスクを先読みし、信頼できる人や組織に誠実に尽くす。責任感が強く堅実だが、最悪のケースを想定しすぎて不安に駆られたり、決断に迷うことがある。</td>
+      </tr>
+      <tr>
+        <td class="etype">7</td>
+        <td class="ename">熱狂家</td>
+        <td class="edesc">「楽しみたい・満たされたい」が原動力。好奇心旺盛で多才、次々と新しい体験を求めるポジティブな冒険家。発想力が豊かだが、退屈や苦痛を避けるため深掘りを嫌い、散漫になることも。</td>
+      </tr>
+      <tr>
+        <td class="etype">8</td>
+        <td class="ename">挑戦者</td>
+        <td class="edesc">「強くありたい・支配されたくない」が原動力。自信と決断力に溢れ、困難に立ち向かうパワフルなリーダー。弱者を守る正義感がある一方、威圧的になったり、弱さを見せることを極端に嫌う。</td>
+      </tr>
+      <tr>
+        <td class="etype">9</td>
+        <td class="ename">平和主義者</td>
+        <td class="edesc">「平穏でありたい・争いを避けたい」が原動力。穏やかで受容的、誰とでも調和できる癒しの存在。多様な視点を理解できるが、対立を恐れて自分の意見を抑え、優柔不断になりやすい。</td>
+      </tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="card highlight" style="text-align:center;">
+    <div style="font-size:12px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:4px;">INFP-A</div>
+    <div style="font-size:28px;font-weight:800;margin:8px 0;">9w1</div>
+    <div style="font-size:13px;color:var(--text-muted);">平和主義者+改革者</div>
+  </div>
+
+  <h3>スコア一覧</h3>
+  <div class="card highlight">
+    <div class="rating"><div class="rating-label"><span>タイプ9 平和主義者</span><span><strong>9</strong></span></div><div class="rating-bar"><div class="rating-fill pink" style="width:90%"></div></div></div>
+    <div class="rating"><div class="rating-label"><span>タイプ7 熱狂家</span><span>8</span></div><div class="rating-bar"><div class="rating-fill pink" style="width:80%"></div></div></div>
+    <div class="rating"><div class="rating-label"><span>タイプ5 調査者</span><span>7</span></div><div class="rating-bar"><div class="rating-fill pink" style="width:70%"></div></div></div>
+    <div class="rating"><div class="rating-label"><span>タイプ4 個人主義者</span><span>6</span></div><div class="rating-bar"><div class="rating-fill pink" style="width:60%"></div></div></div>
+    <div class="rating"><div class="rating-label"><span>タイプ2 援助者</span><span>4</span></div><div class="rating-bar"><div class="rating-fill pink" style="width:40%"></div></div></div>
+    <div class="rating"><div class="rating-label"><span>タイプ1 改革者</span><span>3</span></div><div class="rating-bar"><div class="rating-fill pink" style="width:30%"></div></div></div>
+    <div class="rating"><div class="rating-label"><span>タイプ3 達成者</span><span>3</span></div><div class="rating-bar"><div class="rating-fill pink" style="width:30%"></div></div></div>
+    <div class="rating"><div class="rating-label"><span>タイプ8 挑戦者</span><span>3</span></div><div class="rating-bar"><div class="rating-fill pink" style="width:30%"></div></div></div>
+    <div class="rating"><div class="rating-label"><span>タイプ6 忠実な人</span><span>2</span></div><div class="rating-bar"><div class="rating-fill pink" style="width:20%"></div></div></div>
+  </div>
+
+  <h2>主タイプ：9w1「平和主義者 with 改革者ウィング」</h2>
+
+  <h3>核にある動機</h3>
+  <div class="card highlight">
+    <ul>
+      <li><strong>「平穏を守りたい。誰も傷つけたくない。」</strong>という根源的な欲求</li>
+      <li>対立・衝突・怒りから本能的に遠ざかろうとする</li>
+      <li>自分の存在が周囲の調和を乱すことを最も恐れる</li>
+      <li>1ウィングの影響で「正しくありたい」という静かな倫理観も内在する</li>
+    </ul>
+  </div>
+
+  <h3>強み</h3>
+  <div class="card">
+    <ul>
+      <li>誰といても穏やかな空気を作れる。「この人といると安心する」と言われるタイプ</li>
+      <li>タイプ7の高スコア（8）が示す好奇心と楽観性。平和主義者でありながらフットワークが軽い</li>
+      <li>タイプ5のスコア（7）が示す知的探求心。静かに、しかし深く物事を理解しようとする</li>
+      <li>タイプ4のスコア（6）が示す感受性の豊かさ。独自の内面世界を持つ</li>
+      <li>1ウィングの倫理観とINFP-Aの自己肯定感が合わさり、<strong>「穏やかだが芯がある」</strong>人格を形成</li>
+      <li>情動安定性90%との相乗効果で、周囲が混乱していても動じない「錨」のような存在になれる</li>
+    </ul>
+  </div>
+
+  <h3>注意点・内面の葛藤</h3>
+  <div class="card">
+    <ul>
+      <li>「怒り」がコアエモーション。ただし<strong>タイプ9は怒りを最も抑圧するタイプ</strong>。怒りを感じていることすら自覚できないことがある</li>
+      <li>自分の欲求・意見を後回しにしすぎる。「何でもいいよ」が口癖になりやすい</li>
+      <li>対立を避けるために自分を消す——これが長期的に「自分が何を望んでいるかわからない」状態を生む</li>
+      <li>1ウィングの影響で、内面では自分を批判する声がある。表には出さないが「もっとちゃんとしなければ」というプレッシャー</li>
+      <li>ストレス時はタイプ6方向（不安・疑心暗鬼・最悪のシナリオを想定）に向かいやすい</li>
+    </ul>
+    <blockquote>穏やかな湖面の下に、深い感情と確固たる価値観を隠し持つ。「何も考えていない」のではなく「見せていない」だけ</blockquote>
+  </div>
+
+  <h2>統合と分裂 — ストレスと成長の方向</h2>
+
+  <h3>成長方向：タイプ9 → タイプ3（達成者）</h3>
+  <div class="card highlight">
+    <p>健全な状態でタイプ9が成長すると、タイプ3の<strong>良い側面</strong>を取り込む。</p>
+    <ul>
+      <li>「何でもいい」から「これがやりたい」へ——自分の意志を持てるようになる</li>
+      <li>目標を設定し、それに向かって行動するエネルギーが湧く</li>
+      <li>自分の才能や成果を認め、適切な自己アピールができるようになる</li>
+      <li>「調和のために自分を消す」から「自分も含めた調和」へ移行</li>
+    </ul>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">タイプ3のスコアが3（低い）であることに注目。<strong>普段は達成者モードに入りにくい</strong>分、意識的にこの方向にアクセスすることが成長の鍵。勤勉性77%の高さは、この統合方向へのポテンシャルがあることを示唆している。</p>
+  </div>
+
+  <h3>分裂方向：タイプ9 → タイプ6（忠実な人）</h3>
+  <div class="card">
+    <p>ストレス下でタイプ9が崩れると、タイプ6の<strong>不健全な側面</strong>に移行する。</p>
+    <ul>
+      <li>普段の穏やかさが消え、不安と疑心暗鬼に支配される</li>
+      <li>「この人は本当に信頼できるのか？」と周囲を疑い始める</li>
+      <li>最悪のシナリオを想定し、防衛的・攻撃的になることがある</li>
+      <li>依存的になり、安全な拠り所を必死に求める</li>
+      <li>普段の自分とあまりに違うため、本人も周囲も戸惑う</li>
+    </ul>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">タイプ6のスコアが2（全タイプ最低）であることが重要。<strong>普段は不安・疑念をほぼ感じない</strong>分、出たときの衝撃が大きい。情動安定性90%のおかげで分裂が起きにくいが、起きたときの落差は激しい。</p>
+  </div>
+
+  <h2>サブタイプの影響 — 他のタイプが高スコアである意味</h2>
+
+  <details class="accordion">
+    <summary>タイプ7（熱狂家）スコア8 — 好奇心と楽観のエンジン</summary>
+    <div class="acc-body"><p>タイプ9の穏やかさにタイプ7の好奇心が加わる。「平穏を守りたい」だけでなく、<strong>「新しい体験を楽しみたい」</strong>という欲求が強い。IEEのNe主導と射手座太陽の探求心と完全に共鳴する。退屈が最大の敵であり、何か面白いことを常に探している。タイプ9が「動かなくていいなら動かない」になるのを、タイプ7が防いでいる——非常に健全なバランス。</p></div>
+  </details>
+  <details class="accordion">
+    <summary>タイプ5（調査者）スコア7 — 静かな知的深度</summary>
+    <div class="acc-body"><p>タイプ9の穏やかさとタイプ5の知的好奇心が合わさり、<strong>「物静かだが、とんでもなく深い知識を持っている」</strong>タイプを形成。一人の時間に本を読んだり、気になることを徹底的に調べたりする。IEEのNe主導（広く）とタイプ5（深く）の組み合わせで、「広くて深い」知性になる。</p></div>
+  </details>
+  <details class="accordion">
+    <summary>タイプ4（個人主義者）スコア6 — 内なる独自性</summary>
+    <div class="acc-body"><p>INFPのFi主導と最も共鳴するサブタイプ。「自分だけの感じ方」「自分だけの世界観」を大切にする。タイプ9が「みんなと同じでいい」に流れるのを、タイプ4が<strong>「でも自分は自分だ」</strong>と引き戻す。さそり座の金星・火星の深い感情性もタイプ4的な面と連動している。</p></div>
+  </details>
+  <details class="accordion">
+    <summary>タイプ6（忠実な人）スコア2 — 不安への驚異的な耐性</summary>
+    <div class="acc-body"><p>全タイプ中最低スコア。権威への従属も、不安からの行動も、極めて少ない。これは情動安定性90%と完全に一致する。<strong>「不安に駆られて行動する」ことがほぼない</strong>——これがINFP-Aの「A」の根拠。ただし、これは分裂方向（ストレス時にタイプ6化）が起きたときに<strong>普段との落差が極めて大きい</strong>ことも意味する。</p></div>
+  </details>
+
+  <h2>総括</h2>
+  <blockquote>タイプ9w1 × タイプ7・5高スコア = 「穏やかさの中に好奇心と知性を秘めた平和の守護者」。タイプ7のスコア8（2位）が示す通り、退屈を嫌い新しい体験を求める活動的な側面がある。最大のリスクは「自分の怒り・欲求の抑圧」——平穏のために自分を消しすぎると、いつか溜まったものが一気に噴出する。</blockquote>
+
+</div>
+
+<!-- =============== TAB: MBTI =============== -->
+<div class="tab-content" id="mbti">
+
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>外向/内向・感覚/直感・思考/感情・判断/知覚の4軸で16タイプに分類する世界で最も普及した性格診断です。思考スタイルやコミュニケーションの傾向がわかります。</p>
+  </div>
+
+  <h2>INFP-A（仲介者）</h2>
+  <blockquote>静かな内面に深い価値観と豊かな想像力を宿し、世界を「意味」で読み解く理想主義者。</blockquote>
+  <div class="card highlight">
+    <h4>強み</h4>
+    <ul>
+      <li><strong>深い共感力と感受性</strong> — 他者の感情や価値観を直感的に感じ取る</li>
+      <li><strong>豊かな想像力と創造性</strong> — 独自の世界観を持ち、表現力に優れる</li>
+      <li><strong>価値観への忠実さ</strong> — 自分の信じるものを静かに、しかし確実に守り抜く</li>
+      <li><strong>Assertive(-A)</strong> — INFP特有の繊細さに安定感が加わる珍しいタイプ</li>
+    </ul>
+  </div>
+
+  <h3>INFP × IEE のズレと統合</h3>
+  <div class="card gold">
+    <h4>なぜ同じ人がINFP（Fi主導/内向）とIEE（Ne主導/外向）の両方になるのか</h4>
+    <div class="table-wrap"><table>
+      <tr><th>体系</th><th>主導機能</th><th>意味</th></tr>
+      <tr><td>MBTI</td><td>Fi（内向感情）</td><td>内面の価値観で世界を判断する内向型</td></tr>
+      <tr><td>ソシオニクス</td><td>Ne（外向直観）</td><td>可能性と直観で外界を探索する外向型</td></tr>
+    </table></div>
+    <p style="margin-top:12px;">この矛盾は<strong>「内面で感じる時はINFP、外の世界と関わる時はIEE」</strong>と解釈できる。</p>
+    <ul>
+      <li>一人の時間や深い対話の場面 → Fi的（自分の価値観で静かに判断する）</li>
+      <li>人と関わる場面・新しい環境 → Ne的（可能性を探索し、人の潜在能力を見出す）</li>
+      <li>Fi×Neの使い方が場面で切り替わる</li>
+      <li><strong>BIG5の外向性54%（中間値）がこの「切り替え」を数値で裏付ける</strong></li>
+      <li>完全な内向でも完全な外向でもない — 場面に応じて両方を使い分ける器用さがある</li>
+    </ul>
+  </div>
+
+  <h3>LobeType「溺愛系 不思議生命体」</h3>
+  <div class="card">
+    <p>独特の感性と不思議な魅力で周囲を引き込み、一度好きになると深く一途に愛する。ありふれた言葉ではなく、自分だけの表現で相手を包み込む。存在自体が「他の誰とも違う」と感じさせるタイプ。</p>
+  </div>
+
+  <h2>認知機能スタック：Fi → Ne → Si → Te</h2>
+  <div class="card highlight">
+    <h4>認知機能スタック</h4>
+    <div class="code-block">1. 主機能：Fi（内向的感情）— 自分の価値観・感情で世界を判断
+2. 補助機能：Ne（外向的直観）— 可能性と新しいアイデアの探索
+3. 第三機能：Si（内向的感覚）— 過去の経験・記憶・安定への志向
+4. 劣等機能：Te（外向的思考）— 効率・論理・客観的事実の処理（最も未発達）</div>
+  </div>
+
+  <h3>各機能の詳細</h3>
+
+  <details class="accordion">
+    <summary>Fi（主機能）— 価値観の羅針盤</summary>
+    <div class="acc-body">
+      <p>内向的感情は自分の内面の価値観・感情を基準に世界を判断する力。意思決定の中核。</p>
+      <ul>
+        <li>「これは自分にとって意味があるか？」「本質的に正しいか？」が無意識の第一フィルター</li>
+        <li>表面的な基準（流行・多数派の意見）より自分の内なる基準を優先する</li>
+        <li>他者の感情にも敏感 — ただし自分のFiで「感じ取る」形なので、共感というより「響き合い」に近い</li>
+        <li>IEEのFi（創造機能/2番）とも対応 → 深い個人的感情関係の構築が得意</li>
+        <li>エニアグラム9w1の「調和を求める」姿勢がFiの穏やかさを強化している</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>Ne（補助機能）— 可能性の探索者</summary>
+    <div class="acc-body">
+      <p>外向的直観は表面の奥に隠れた可能性・パターン・関連性を見出す力。</p>
+      <ul>
+        <li>Fiが「何を大切にするか」を担い、Neが「どんな可能性があるか」を担う</li>
+        <li>人の言葉の裏にある本音や、状況の背景にある意味を直感的に掴む</li>
+        <li>IEEではNeが主導機能（1番）のため、MBTIよりも外向直観が強く出る場面がある</li>
+        <li><strong>ここにINFPとIEEの最大のズレがある — Neの優先順位が逆転している</strong></li>
+        <li>創造性58%と合わせて、ユニークな発想やアイデアの源泉となっている</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>Si（第三機能）— 過去の記憶と安定</summary>
+    <div class="acc-body">
+      <p>内向的感覚は過去の経験・身体感覚・日常の安定を司る力。</p>
+      <ul>
+        <li>INFPでは第三機能だが、IEEでは苦点（4番/最弱）</li>
+        <li>思い出や経験を大切にし、懐かしさに浸ることがある</li>
+        <li>ルーティンや身体的な快適さへの意識は弱め — 没頭すると食事や睡眠を忘れがち</li>
+        <li>IEEのSi苦点との一致 → 「身体感覚・物質的安定」が構造的に弱い</li>
+        <li>勤勉性77%がSiの弱さを意志力で補っている</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>Te（劣等機能）— 最大の弱点</summary>
+    <div class="acc-body">
+      <p>外向的思考は効率・論理・客観的データで世界を整理する力。INFPにとって最も未発達で最も制御できない。</p>
+      <ul>
+        <li>「効率的にやるべき」「データではこうだ」という論理的な判断が苦手</li>
+        <li>組織的な管理・スケジュール管理・数値目標の設定に苦労しやすい</li>
+        <li>IEEのTe（役割機能/3番）とも一致 → 外的効率の処理が構造的に苦手</li>
+        <li>ストレス時にTeが暴走 → 突然「効率最優先」「データで証明しろ」と普段と逆の態度が出る</li>
+        <li>ただし勤勉性77%と情動安定性90%がTeの弱さを大きく補償している — 表面上は困っていないように見える</li>
+      </ul>
+    </div>
+  </details>
+
+  <h2>INFPの弱点 — 認知機能から見る構造的課題</h2>
+
+  <div class="card">
+    <h4>1. Te劣等がもたらす「実行力の壁」</h4>
+    <p>理想や価値観は明確に持っているが、それを具体的な行動計画に落とし込む段階で止まりやすい。「やりたいこと」と「やるべきこと」の間にギャップが生まれ、「もう少し考えてから」と先延ばしにする傾向がある。ただし勤勉性77%と-Aの安定感により、他のINFPと比べてこの弱点は大幅に軽減されている。</p>
+  </div>
+
+  <div class="card">
+    <h4>2. Fi主導がもたらす「価値観の閉じこもり」</h4>
+    <p>自分の価値観と合わない環境・人に対して、静かに距離を取る傾向がある。正面衝突は避けるが、内面では「これは違う」と判定している。エニアグラム9の「表面的な調和」とFiの「内面の基準」が矛盾すると、外では笑っているのに内側では不満が蓄積する——という構造が生まれる。</p>
+  </div>
+
+  <div class="card">
+    <h4>3. Ne補助がもたらす「可能性の迷路」</h4>
+    <p>Neが「こうかもしれない」「ああかもしれない」と可能性を広げ続け、Fiが「でもこれは自分の価値観に合うか？」とフィルタリングする。結果、選択肢が多すぎて決められない状態に陥ることがある。特に人生の大きな決断（進路・キャリア・恋愛）で、理想が高すぎて現実の選択肢がどれも「足りない」と感じやすい。</p>
+  </div>
+
+  <h2>INFP-Aの意味 — 「主張型」の光と影</h2>
+  <p style="font-size:13px;color:var(--text-muted);">MBTI-16Personalitiesでは、各タイプにA（Assertive）とT（Turbulent）のサブタイプがある。INFPは通常-T（繊細型）が圧倒的に多く、-Aは珍しい。</p>
+
+  <div class="card highlight">
+    <h4>-A（Assertive）の特徴</h4>
+    <ul>
+      <li>自己肯定感が高く、自分の価値観に対する揺るぎない自信を持つ</li>
+      <li>失敗しても長く引きずらない — INFPの繊細さに安定感を与える</li>
+      <li>他者からの批判に対して過度に傷つかない</li>
+      <li>ストレス下でも感情的に崩壊しにくい</li>
+      <li><strong>情動安定性90%</strong>が-Aの根拠を数値で裏付ける</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>-Aの影の側面</h4>
+    <ul>
+      <li>自分の傷に気づくのが遅い — INFPの感受性が-Aの安定感に覆い隠される</li>
+      <li>他者の痛みを過小評価するリスク — 「自分が大丈夫だから相手も大丈夫だろう」</li>
+      <li>本来INFPが持つ「繊細さゆえの深い共感」が薄まる可能性がある</li>
+      <li>問題を「大丈夫」で片付けてしまい、根本解決に至らないことがある</li>
+    </ul>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">情動安定性90%と合わさることで、INFP-Aは「常に穏やかで動じない人」に見える。しかし内側のFiは確実に感じている。表に出さないだけで蓄積は進んでいる——<strong>外からは見えない傷が最も深くなる構造</strong>を持つ。</p>
+  </div>
+
+  <h2>INFP-Aの一言</h2>
+  <blockquote>「静かな内面に揺るぎない価値観を持ち、世界を意味で読み解く——繊細さと安定感が共存する、理想主義者の完成形。」</blockquote>
+
+</div>
+
+<!-- =============== TAB: ソシオニクス =============== -->
+<div class="tab-content" id="socionics">
+
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>ユングの心理機能を8つに拡張し、16タイプ間の「関係性」まで理論化した旧ソ連発の性格類型論です。タイプ間の相性が数学的に定義されている点がMBTIとの最大の違いです。</p>
+  </div>
+
+  <h2>ソシオニクスとは</h2>
+  <div class="card">
+    <p>MBTIより精緻な、旧ソ連発祥の心理類型論。<strong>情報代謝（Information Metabolism）</strong>の概念を核に、8つの認知機能がどの「位置（ブロック）」に置かれるかで16タイプを分類する。特に<strong>タイプ間の相互関係（インタータイプ・リレーション）</strong>が体系化されており、相性分析の精度が高い。</p>
+  </div>
+
+  <h2>IEE-Q（直観-倫理型外向）</h2>
+  <div class="card highlight" style="text-align:center;">
+    <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;">IEE-Q</div>
+    <div style="font-size:28px;font-weight:800;margin:8px 0;">Ne</div>
+    <div style="font-size:13px;color:var(--text-muted);">外向直観 主導<br>デルタ(δ)クワドラ<br>別称：アドバイザー / 探求サブタイプ</div>
+  </div>
+
+  <h2>Model A 機能配置</h2>
+  <div class="table-wrap"><table>
+    <tr><th>ブロック</th><th>位置</th><th>機能</th><th>説明</th></tr>
+    <tr><td>Ego</td><td>1 主導</td><td><strong>Ne</strong></td><td>可能性の探索、人の潜在能力を見出す</td></tr>
+    <tr><td>Ego</td><td>2 創造</td><td><strong>Fi</strong></td><td>深い個人的感情関係の構築、絆の質を重視</td></tr>
+    <tr><td>SuperEgo</td><td>3 役割</td><td>Te</td><td>外的効率・論理的整理（苦手だがやればできる）</td></tr>
+    <tr><td>SuperEgo</td><td>4 苦点</td><td>Si</td><td>身体感覚・ルーティン・物質的安定（最弱・最敏感）</td></tr>
+    <tr><td>SuperId</td><td>5 示唆</td><td><strong>Se</strong></td><td>意志力・現実への介入（他者に求める）</td></tr>
+    <tr><td>SuperId</td><td>6 動員</td><td><strong>Ti</strong></td><td>論理的体系化（受け取ると活性化）</td></tr>
+    <tr><td>Id</td><td>7 無視</td><td>Ni</td><td>長期予測・深い意味の把握（使えるが重視しない）</td></tr>
+    <tr><td>Id</td><td>8 背景</td><td>Fe</td><td>集団の雰囲気・感情表現（背景処理）</td></tr>
+  </table></div>
+
+  <h3>IEEの本質</h3>
+  <div class="card highlight">
+    <p>Ne主導型は「<strong>可能性と新しいアイデアの無限生成</strong>」を最も得意とする人間。人の中に隠れた潜在能力や未来の可能性を見出し、それを引き出すことに喜びを感じる。Fi（創造機能）により、その探索は単なる好奇心ではなく<strong>深い個人的な絆</strong>の中で展開される。</p>
+    <p style="margin-top:8px;"><strong>弱点の核心：</strong>Si（内向感覚）が苦点ポジション（4番）にある。身体感覚・ルーティン・物質的安定の維持が自力では難しく、<strong>誰かにSiを提供してもらうことで初めて完成する</strong>人間。</p>
+  </div>
+
+  <h3>ビッグファイブとの対応</h3>
+  <div class="card">
+    <ul>
+      <li><strong>外向性54%</strong> → Ne主導なのに中間値。MBTIのFi主導（内向）との二重性がここに現れる</li>
+      <li><strong>協調性57%</strong> → Fi創造機能による「深い個人的関係」の重視。万人と合わせるより特定の人との絆を選ぶ</li>
+      <li><strong>勤勉性77%</strong> → Te（役割機能/3番）の弱さを意志力で補償している証拠。本来IEEはTe苦手だが、この数値で実行力を確保</li>
+      <li><strong>情動安定性90%</strong> → Fe（背景機能/8番）の薄さと一致。感情の波が小さく、安定している</li>
+      <li><strong>創造性58%</strong> → Ne主導にしてはやや控えめ。Fi主機能（MBTI側）の「内面の質」重視が、量的な創造性を抑制している可能性</li>
+    </ul>
+  </div>
+
+  <h2>デルタ（δ）クワドラの文化</h2>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text-muted);">ソシオニクスでは4つのクワドラがあり、IEEはデルタ（δ）に所属する。クワドラは<strong>集団の中で何を重視するか</strong>を決める。</p>
+    <div class="table-wrap"><table>
+      <tr><th>クワドラ</th><th>重視する価値</th><th>雰囲気</th></tr>
+      <tr><td>アルファ（α）</td><td>楽しさ・知的遊び・調和</td><td>温かくて軽い</td></tr>
+      <tr><td>ベータ（β）</td><td>力・意志・情熱・構造</td><td>熱くて強い</td></tr>
+      <tr><td>ガンマ（γ）</td><td>成果・効率・個人の自由</td><td>クールで合理的</td></tr>
+      <tr><td><strong>デルタ（δ）</strong></td><td><strong>誠実さ・調和・個人の価値観</strong></td><td><strong>穏やかで深い</strong></td></tr>
+    </table></div>
+  </div>
+
+  <h3>デルタクワドラの特徴</h3>
+  <div class="card highlight">
+    <ul>
+      <li>「本音で付き合える人」を最も重視する。表面的な社交は苦手か興味がない</li>
+      <li>誠実さ・信頼性・個人の価値観を尊重し合える関係に安心感を得る</li>
+      <li>穏やかだが深い絆を求める。激しい感情表現より、静かな理解を好む</li>
+      <li>ユーモアは温かく穏やかなスタイル。皮肉より共感的なジョーク</li>
+      <li>一人ひとりの個性を尊重し、画一的なルールより個別の対応を重視する</li>
+    </ul>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">デルタクワドラに所属しているということは、<strong>誠実さと個人の価値観が尊重される穏やかな環境でこそ本領を発揮する</strong>ということ。「競争と効率」より「信頼と理解」を求める根拠がここにある。</p>
+  </div>
+
+  <h2>各機能ポジションの実生活での現れ方</h2>
+  <div class="card">
+    <div class="table-wrap"><table>
+      <tr><th>位置</th><th>機能</th><th>日常での具体例</th></tr>
+      <tr><td>1 主導</td><td>Ne</td><td>人の可能性や潜在能力を見出す。「この人、こんなこともできるはず」と直感的にわかる</td></tr>
+      <tr><td>2 創造</td><td>Fi</td><td>特定の人と深い絆を築く。「万人に好かれる」より「大切な人を深く理解する」を選ぶ</td></tr>
+      <tr><td>3 役割</td><td>Te</td><td>効率的にやろうと思えばできるが、長時間は消耗する。仕事モードと本来の自分が別人に見える</td></tr>
+      <tr><td>4 苦点</td><td>Si</td><td>体調管理・ルーティン・物質的な安定が最も苦手。没頭すると食事も睡眠も忘れる</td></tr>
+      <tr><td>5 示唆</td><td>Se</td><td>押しの強さ・意志力を他者から提供されると安心する。「引っ張ってくれる人」に惹かれる</td></tr>
+      <tr><td>6 動員</td><td>Ti</td><td>論理的な説明や体系化を受けると頭がクリアになる。「なるほど、そういう構造なんだ」で活性化</td></tr>
+      <tr><td>7 無視</td><td>Ni</td><td>長期的なビジョンは持てるが重視しない。「今この瞬間の可能性」を優先する</td></tr>
+      <tr><td>8 背景</td><td>Fe</td><td>場の雰囲気は読めるが、自分から積極的にコントロールしようとしない。自然体で接する</td></tr>
+    </table></div>
+  </div>
+
+  <h2>IEEの苦点Si — 「身体感覚・安定」への構造的弱さ</h2>
+  <div class="card">
+    <p>Si（内向感覚）は「身体感覚・ルーティン・物質的安定・快適さの維持」の機能。IEEにとってこれは<strong>4番目＝苦点</strong>であり、最も脆弱で最も過敏な領域。</p>
+    <h4 style="margin-top:12px;">具体的な現れ方</h4>
+    <ul>
+      <li>体調の変化に気づくのが遅い。疲れを自覚した時にはすでに限界を超えている</li>
+      <li>規則正しい生活リズムの維持が苦手。夢中になると昼夜逆転しやすい</li>
+      <li>「毎日同じことを同じ時間にやる」ルーティンが構造的に苦痛</li>
+      <li>身の回りの整理整頓・物質的な環境の管理に無頓着になりがち</li>
+      <li>裏を返せば、<strong>生活の安定を支えてくれるパートナーがいると劇的に安定する</strong></li>
+    </ul>
+    <p style="margin-top:8px;font-size:13px;color:var(--accent);">勤勉性77%がSi苦点の弱さを意志力で大幅に補償している。他のIEEよりもルーティンをこなせるが、<strong>それは「得意だから」ではなく「頑張っているから」</strong>であり、消耗の蓄積は見えにくい。</p>
+  </div>
+
+  <h2>IEEの双対関係：SLI（ISTP相当）</h2>
+  <div class="card gold">
+    <div class="code-block">IEEのNe（最得意）→ SLIのNe（最も求めている）
+SLIのSi（最得意）→ IEEのSi（最も求めている）
+IEEのFi（得意）→ SLIのFi（求めている）
+SLIのTe（得意）→ IEEのTe（求めている）</div>
+    <p style="margin-top:8px;">ソシオニクスで「最高の相性」と定義される唯一の関係。全ての弱点を相手が自然に補完する。IEEの「可能性を見出す力」をSLIの「現実的な実行力」が受け止め、SLIの「可能性への渇望」をIEEが満たす——互いの存在が互いを完成させる構造。</p>
+  </div>
+
+</div>
+
+<!-- =============== TAB: 恋愛タイプ =============== -->
+<div class="tab-content" id="love">
+
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>恋愛心理学の「愛の6類型（リーの愛のスタイル）」をベースに、情熱型・友愛型・無償型などの恋愛パターンを分析します。どんな愛し方をし、何を求めるかが具体的にわかります。</p>
+  </div>
+
+  <h2>恋愛スタイル</h2>
+  <div class="card highlight" style="text-align:center;">
+    <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;">INFP-A × IEE-Q</div>
+    <div style="font-size:16px;font-weight:800;margin:8px 0;">Agape + Eros</div>
+    <div style="font-size:13px;color:var(--text-muted);">無償的で情熱的</div>
+  </div>
+
+  <h3>恋愛パターン</h3>
+  <div class="card highlight">
+    <div class="table-wrap"><table>
+      <tr><th>特徴</th><th>根拠</th></tr>
+      <tr><td>理想の恋愛像を心の中に持っている</td><td>Fi主機能 + Ne補助 → 「こうあるべき」の理想が豊か</td></tr>
+      <tr><td>一度好きになると非常に一途で深い</td><td>タイプ9の忠誠心 + Fi創造の深い絆</td></tr>
+      <tr><td>独特の感性で相手を引き込む不思議な魅力</td><td>LobeType「溺愛系 不思議生命体」</td></tr>
+      <tr><td>言葉で愛情を丁寧に伝える</td><td>Fi+Neの言語化力 + 創造的な表現力</td></tr>
+      <tr><td>束縛は嫌うが安心感を求める</td><td>IEEのSe示唆 + タイプ9の調和志向</td></tr>
+      <tr><td>感情的なドラマは少なく穏やか</td><td>情動安定性90% + -A(Assertive)</td></tr>
+    </table></div>
+    <p style="margin-top:8px;">恋愛の核心 = <strong>「自分だけの言葉と感性で、たった一人の相手を深く愛する——静かだが、その愛の深さは底が見えない。」</strong></p>
+  </div>
+
+  <h2>愛情言語</h2>
+  <div class="card">
+    <h4>与え方：クオリティタイム + 肯定の言葉</h4>
+    <p>INFPの愛情表現は「一緒にいる時間の質」と「言葉で気持ちを伝えること」に集中する。Fi創造機能で深い感情を言語化し、Neで相手の本質を捉えた言葉を紡ぐ。</p>
+    <ul>
+      <li><strong>二人だけの空間と時間</strong>：大勢より二人きりを選ぶ。静かな時間の共有が最上の愛情表現</li>
+      <li><strong>心に響く言葉</strong>：テンプレではない、相手の本質を捉えた独自の表現で気持ちを伝える</li>
+      <li><strong>深い対話</strong>：表面的な会話ではなく、価値観や夢を分かち合う対話を求める</li>
+      <li><strong>存在の肯定</strong>：相手の「ありのまま」を受け入れ、存在そのものを肯定する</li>
+    </ul>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">Agape的な「無条件の愛」がベースにあるため、見返りを求めずに与え続けることができる。ただし、それが<strong>当然</strong>と受け取られ続けると、9w1の我慢の限界を超えた時に静かに離れていく。</p>
+
+    <h4 style="margin-top:16px;">求め方：スキンシップ + 奉仕</h4>
+    <p>IEEのSe示唆（5番）は「身体的な安心感」を他者に求める。Si苦点の補完として、生活面でのサポートも無意識に求めている。</p>
+    <ul>
+      <li><strong>温かい身体的接触</strong>：手を繋ぐ、寄り添う、ハグ——言葉にならない安心の伝達</li>
+      <li><strong>生活面の安定サポート</strong>：Si苦点を補ってくれる存在に強く惹かれる</li>
+      <li><strong>守られている感覚</strong>：Se示唆=「引っ張ってくれる」「守ってくれる」強さに安心する</li>
+    </ul>
+
+    <h4 style="margin-top:12px;">刺さる言葉</h4>
+    <div class="magic-row">
+      <div class="magic-good"><strong>一緒にいると落ち着く</strong><br>存在自体の肯定。タイプ9の核心に届く</div>
+      <div class="magic-good"><strong>そのままでいいよ</strong><br>Fiの価値観をまるごと受容してくれる</div>
+    </div>
+    <div class="magic-row">
+      <div class="magic-good"><strong>あなたの考え方好き</strong><br>Fi+Neの独自性を認められる喜び</div>
+      <div class="magic-good"><strong>大丈夫、味方だよ</strong><br>Se示唆=守られている安心感</div>
+    </div>
+
+    <h4 style="margin-top:16px;">響かない/逆効果の言葉</h4>
+    <div class="magic-row">
+      <div class="magic-bad"><strong>考えすぎ</strong><br>Fi+Neの思考プロセスそのものの否定</div>
+      <div class="magic-bad"><strong>現実を見なよ</strong><br>Ne的な理想・可能性の全否定</div>
+    </div>
+    <div class="magic-row">
+      <div class="magic-bad"><strong>みんなそうしてるよ</strong><br>Fiの個人的価値観を集団論理で押し潰す</div>
+      <div class="magic-bad"><strong>早く決めて</strong><br>Ne+Fiの熟考プロセスを焦らされる苦痛</div>
+    </div>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);"><strong>ポイント：</strong>INFPに刺さるのは「あなたの本質を理解している」と伝わる言葉。表面的な褒めではなく、内面を見てくれていると感じる具体性が鍵。</p>
+  </div>
+
+  <h2>アタッチメント(愛着)スタイル</h2>
+  <div class="card gold">
+    <div class="table-wrap"><table>
+      <tr><th>根拠</th><th>評価</th></tr>
+      <tr><td>情動安定性90%</td><td>感情的な揺れが少なく安定している</td></tr>
+      <tr><td>タイプ9の調和志向</td><td>対立を避け、穏やかな関係を維持する</td></tr>
+      <tr><td>INFP-Aアサーティブ</td><td>自己肯定感が高く、過度な不安に陥りにくい</td></tr>
+      <tr><td>IEEのSe示唆</td><td>守ってくれる安定した存在を求める</td></tr>
+      <tr><td>Fi主機能の深さ</td><td>信頼した相手には深く開示するが、そこに至るまでは慎重</td></tr>
+    </table></div>
+    <p style="margin-top:8px;"><strong>基本は安定型寄り。</strong>情動安定90%と-Aの自己肯定感により、多くの場面で安定したアタッチメントを示す。ただし、Fi主機能による「選別の深さ」があるため、心を開くまでは時間がかかる。一度信頼した相手には深い安心感の中で自然体を見せるが、その信頼が裏切られると静かに、しかし決定的に離れる。</p>
+  </div>
+
+  <h2>アタッチメントの振る舞いパターン</h2>
+  <div class="card highlight">
+    <h4>心を閉じるタイミング</h4>
+    <ul>
+      <li>自分の価値観や大切なものを否定・軽視されたとき</li>
+      <li>「みんなそうしてる」「普通はこうだよ」と個性を押し潰されたとき</li>
+      <li>深い対話を求めているのに表面的な会話しか返ってこないとき</li>
+      <li>自分の気持ちを言葉にする前に結論を急かされたとき</li>
+      <li>相手の態度に「本気」が感じられなくなったとき</li>
+    </ul>
+
+    <h4>心が閉じるときのシグナル（相手が気づくべきサイン）</h4>
+    <ol>
+      <li><strong>初期：</strong>いつもより言葉が少なくなる / 深い話題を避ける</li>
+      <li><strong>中期：</strong>笑顔は見せるが、目が笑っていない。表面的な「大丈夫」が増える</li>
+      <li><strong>末期：</strong>静かに距離を取り始める。連絡頻度が落ちるが、理由は言わない</li>
+    </ol>
+
+    <div class="golden-box">
+      <div class="title">相手に求めたい対応</div>
+      <p style="font-size:13px;color:var(--text-muted);">問い詰めるのではなく、<strong>穏やかに「最近、何か感じてることある？」と開かれた質問</strong>をしてくれる人。正解を求めずに待てる人。INFPは自分の感情を言語化するのに時間がかかる——その時間を焦らずに受け止めてくれることが信頼の証になる。</p>
+    </div>
+
+    <div class="danger-box">
+      <div class="title">自分が気をつけるべきこと</div>
+      <p style="font-size:13px;color:var(--text-muted);">タイプ9の「問題を避ける」傾向とFiの「内面で完結する」傾向が合わさると、<strong>不満を一切言わずに内側で結論を出してしまう</strong>。相手から見ると「突然冷たくなった」「急に別れを切り出された」に見える。小さな違和感のうちに言語化する練習が、関係の質を劇的に変える。</p>
+    </div>
+  </div>
+
+  <h2>Agape+Eros型の判断基準</h2>
+  <div class="card">
+    <p>Agape（無償の愛）とEros（情熱的な愛）の組み合わせ。「見返りを求めずに深く愛する」が基本姿勢だが、無意識に査定している項目がある：</p>
+    <div class="table-wrap"><table>
+      <tr><th>査定項目</th><th>何を見てるか</th></tr>
+      <tr><td><strong>誠実さ</strong></td><td>嘘がないか。本音で向き合ってくれるか。表面的な態度を取っていないか</td></tr>
+      <tr><td><strong>内面の深さ</strong></td><td>表面的な人ではないか。深い対話ができるか。価値観を持っているか</td></tr>
+      <tr><td><strong>独自性</strong></td><td>その人らしさがあるか。「普通」に埋没していないか</td></tr>
+      <tr><td><strong>安心感</strong></td><td>一緒にいて自然体でいられるか。無理しなくていいか</td></tr>
+      <tr><td><strong>受容力</strong></td><td>自分の「変わった部分」も含めて受け入れてくれるか</td></tr>
+      <tr><td><strong>情熱</strong></td><td>何かに本気になれる人か。冷めた態度の人には惹かれない（Eros要素）</td></tr>
+    </table></div>
+    <p style="margin-top:12px;font-size:13px;color:var(--text-muted);"><strong>注意：</strong>Agape型は「与え続ける」ことができるため、相手がこれらを満たしていなくても初期は愛を注ぐ。しかし時間とともに「自分の愛が一方通行だ」と気づくと、静かに冷めていく。</p>
+  </div>
+
+  <h3>恋愛における行動パターン</h3>
+  <div class="card">
+    <ul>
+      <li>理想の恋愛像を持っており、その理想に近い相手に出会うと一気に心が動く</li>
+      <li>好きになるプロセスがゆっくりだが、一度火がつくと非常に深い（Eros的な情熱）</li>
+      <li>相手の可能性や本質を見抜く力があり、「まだ見せていない部分」にも惹かれる（Ne）</li>
+      <li>言葉で気持ちを伝えるのが得意 — ただし直接言うより手紙やメッセージの方が表現力が上がる</li>
+      <li>二人だけの世界観を作りたがる。共有の思い出・言葉・空間に特別な意味を見出す</li>
+      <li>束縛はしないが、相手にも束縛されたくない。「信頼の上の自由」がベスト</li>
+    </ul>
+  </div>
+
+  <h3>恋愛の弱点</h3>
+  <div class="card">
+    <ul>
+      <li>理想が高すぎて、現実の相手が「足りない」と感じることがある（Ne+Fiの完璧主義）</li>
+      <li>不満を言葉にせず内側で処理してしまう（タイプ9 + Fi = 沈黙の蓄積）</li>
+      <li>「相手も自分と同じ深さで感じているはず」と無意識に期待する（Fi的投影）</li>
+      <li>-Aの安定感により「傷ついていることに本人が気づくのが遅い」</li>
+      <li>Te劣等により、関係の問題を論理的に話し合うことが苦手（感情的に正しいことと論理的に正しいことが噛み合わない）</li>
+    </ul>
+  </div>
+
+  <h2>総括</h2>
+  <blockquote>「静かな情熱で深く愛し、独自の言葉で気持ちを伝える——与え方は無償で、求め方は安心感。この二つのバランスに気づけるかが、恋愛の質を決める。」最も必要なのは、小さな違和感を言語化する勇気。</blockquote>
+
+</div>
+
+<!-- =============== TAB: 星座エレメント =============== -->
+<div class="tab-content" id="element">
+
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>12星座を火・地・風・水の4元素と、活動・固定・柔軟の3区分で分類し、性格の根底にあるエネルギーの質を読み解きます。同じ元素同士の安定感や、異なる元素間の刺激・摩擦のパターンがわかります。</p>
+  </div>
+
+  <div class="table-wrap"><table>
+    <tr><th>項目</th><th>内容</th></tr>
+    <tr><td>星座</td><td>射手座（Sagittarius）</td></tr>
+    <tr><td>エレメント</td><td>火（Fire）</td></tr>
+    <tr><td>モダリティ</td><td>柔軟宮（Mutable）</td></tr>
+    <tr><td>支配星</td><td>木星（Jupiter）</td></tr>
+    <tr><td>度数</td><td>太陽 約24°</td></tr>
+  </table></div>
+
+  <h2>エレメント対応</h2>
+  <div class="card highlight" style="text-align:center;">
+    <div style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1px;">INFP-A × IEE-Q</div>
+    <div style="font-size:18px;font-weight:800;margin:8px 0;">射手座</div>
+    <div style="font-size:13px;color:var(--text-muted);">火・柔軟宮・木星</div>
+  </div>
+
+  <h2>火(Fire)の特性</h2>
+  <div class="card highlight">
+    <ul>
+      <li><strong>情熱</strong>と行動力を司る</li>
+      <li><strong>直感</strong>に従って前に進む力</li>
+      <li>自己表現への強い衝動</li>
+      <li>楽観性と<strong>冒険心</strong></li>
+      <li>インスピレーションの源泉</li>
+    </ul>
+    <p style="margin-top:12px;">INFPは通常「水」のイメージで語られることが多い——内省的で感情が深く、静かな内面世界を持つ。しかし射手座の火エレメントは、<strong>INFPのNe（可能性の探索）と深く共鳴する</strong>。可能性を追い求める冒険心、まだ見ぬ世界への憧れ、理想に向かって進む情熱——これらはINFPの「静かな炎」であり、射手座の火がそれを裏付ける。</p>
+  </div>
+
+  <h2>射手座の深掘り</h2>
+  <div class="card">
+    <ul>
+      <li>「真理の探究者」——哲学・思想・精神的な深みを求める。表面的な答えでは満足しない</li>
+      <li>自由を最も重要な価値とする。束縛や制限に対して本能的に抵抗する</li>
+      <li>楽観的で未来志向。「きっとうまくいく」が無意識の前提</li>
+      <li>異文化・異なる価値観への強い関心。「自分の知らない世界」に惹かれる</li>
+      <li>INFPの「理想追求」と射手座の「真理探究」が重なり、<strong>理想主義の二重構造</strong>が形成される</li>
+    </ul>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">射手座の「自由と冒険」は、INFPの内向性と一見矛盾する。しかしINFPの冒険は「物理的な旅」だけでなく<strong>「精神的な旅」</strong>でもある。本を読むこと、新しい思想に出会うこと、誰かの内面世界を理解すること——これら全てが射手座的な「冒険」として現れる。</p>
+  </div>
+
+  <h2>支配星：木星（Jupiter）</h2>
+  <div class="card highlight">
+    <p>射手座の支配星は木星。木星は<strong>拡大・楽観・哲学・幸運・寛容</strong>を司る。</p>
+    <ul>
+      <li><strong>拡大の原理</strong> → 視野を広げたい、もっと知りたい、もっと理解したい——INFPのNeと同じベクトル</li>
+      <li><strong>楽観性</strong> → タイプ9の「大丈夫」という基本姿勢、-Aの自己肯定感と一致</li>
+      <li><strong>哲学的思考</strong> → Fiの「意味の追求」と木星の「真理の探究」が共鳴する</li>
+      <li><strong>寛容さ</strong> → タイプ9の受容性、協調性57%の「個々の違いを認める」姿勢の源泉</li>
+      <li>木星は「度を超える」星でもある → 理想主義が行き過ぎるリスク、現実との乖離の可能性</li>
+    </ul>
+  </div>
+
+  <h2>モダリティ：柔軟宮（Mutable）</h2>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text-muted);">12サインは3つのモダリティに分類される。射手座は<strong>柔軟宮（Mutable）</strong>。</p>
+    <div class="table-wrap"><table>
+      <tr><th>モダリティ</th><th>役割</th><th>サイン</th></tr>
+      <tr><td>活動宮（Cardinal）</td><td>始める</td><td>牡羊・蟹・天秤・山羊</td></tr>
+      <tr><td>固定宮（Fixed）</td><td>続ける</td><td>牡牛・獅子・さそり・水瓶</td></tr>
+      <tr><td><strong>柔軟宮（Mutable）</strong></td><td><strong>適応する</strong></td><td><strong>双子・乙女・射手・魚</strong></td></tr>
+    </table></div>
+    <h4 style="margin-top:12px;">柔軟宮の特性</h4>
+    <ul>
+      <li><strong>高い適応力</strong>。状況が変わっても柔軟に対応を変えられる</li>
+      <li><strong>一つのやり方に固執しない</strong>。より良い方法があれば自然に切り替える</li>
+      <li>INFPの「価値観への忠実さ」と柔軟宮の「適応力」の組み合わせ → <strong>核心は変えないが、表現方法は柔軟に変えられる</strong></li>
+      <li>ただし柔軟宮は「決断の先延ばし」にもなりうる。Ne補助の「もっと他にも」傾向と合わさると、選択肢を絞れなくなるリスク</li>
+      <li>エニアグラム9の「優柔不断」と柔軟宮の「適応性」は表裏一体 — 長所にも短所にもなる</li>
+    </ul>
+  </div>
+
+  <h2>射手座24° — 度数の意味</h2>
+  <div class="card">
+    <p>太陽が射手座24°にあるのは、射手座の後半に位置する。後半の度数は<strong>そのサインのテーマをより成熟した形で表現する</strong>段階。</p>
+    <ul>
+      <li>射手座前半が「冒険と探索」なら、後半は<strong>「探索から得た知恵を統合する」</strong>段階</li>
+      <li>単なる好奇心ではなく、経験を意味のある全体像に組み上げようとする</li>
+      <li>次のサイン（山羊座）の影響が微かに混ざり始める → <strong>現実的な実行力・構造化への意識</strong>が芽生える</li>
+      <li>勤勉性77%の高さは、この山羊座的影響の反映とも読める</li>
+      <li>射手座の「自由と理想」に、山羊座の「構造と責任」がブレンドされる — <strong>夢を語るだけでなく、形にしようとする射手座</strong></li>
+    </ul>
+  </div>
+
+  <h2>火エレメント × INFP × IEE の統合</h2>
+  <div class="card gold">
+    <p>火エレメントは「情熱と行動」を重視する。INFPは「価値観と意味」を重視する。IEEは「可能性と人の潜在能力」を重視する。</p>
+    <p style="margin-top:8px;"><strong>この3つが重なると：</strong></p>
+    <ul>
+      <li><strong>意味のあることに対して静かだが強い情熱を燃やす</strong></li>
+      <li>理想主義者だが、夢想で終わらない行動力を持つ（火エレメント + 勤勉性77%）</li>
+      <li>人の可能性を信じ、その成長を支える「静かな炎」の存在</li>
+      <li>自由と冒険心を内に秘めつつ、深い個人的な絆を大切にする</li>
+      <li>「全てに意味がある」と信じる楽観性 — これが情動安定90%の精神的な根拠</li>
+    </ul>
+    <div class="table-wrap" style="margin-top:12px;"><table>
+      <tr><th>射手座の特性</th><th>INFP × IEE との対応</th></tr>
+      <tr><td>真理の探究</td><td>Fi主機能の「意味の追求」 × Ne主導の「可能性の探索」</td></tr>
+      <tr><td>自由への渇望</td><td>IEEのNe主導 × タイプ9の「束縛を嫌う」</td></tr>
+      <tr><td>楽観性</td><td>-A(Assertive) × 情動安定90% × 木星</td></tr>
+      <tr><td>異文化への関心</td><td>Ne補助の「新しい世界への好奇心」</td></tr>
+      <tr><td>理想主義</td><td>Fi × Ne × 9w1 = 三重の理想主義構造</td></tr>
+    </table></div>
+  </div>
+
+  <h2>総括</h2>
+  <blockquote>「射手座 × INFP × IEE = 静かな炎を胸に、意味と可能性を追い求める理想主義者。柔軟宮の適応力がINFPの内省的な深さと合わさり、外の世界の多様性を内面で統合していく——水のように見えて、その核には火が燃えている。」</blockquote>
+
+</div>
+
+<!-- ===== TAB: ホロスコープ ===== -->
+<div class="tab-content" id="horoscope">
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>出生時の天体配置から、太陽・月・ASC（アセンダント）・MC（天頂）などの位置を読み解き、性格の深層構造と人生のテーマを分析します。太陽星座だけでは見えない深層的な性格・対人傾向が多層的にわかります。</p>
+  </div>
+
+  <h2>出生データ</h2>
+  <div class="card">
+    <div class="data-grid">
+      <div class="data-item"><strong>生年月日</strong><br>2004年12月16日</div>
+      <div class="data-item"><strong>出生時刻</strong><br>15:37</div>
+      <div class="data-item"><strong>出生地</strong><br>埼玉県坂戸市</div>
+      <div class="data-item"><strong>太陽星座</strong><br>射手座（火・柔軟宮）</div>
+    </div>
+  </div>
+
+  <h2>ASC x MC</h2>
+  <div class="table-wrap"><table>
+    <tr><th>軸</th><th>星座</th><th>度数</th><th>意味</th></tr>
+    <tr><td><strong>ASC</strong></td><td>牡牛座</td><td>26°</td><td>第一印象・外見・社会的ペルソナ</td></tr>
+    <tr><td><strong>MC</strong></td><td>水瓶座</td><td>7°</td><td>キャリア・社会的使命・到達点</td></tr>
+    <tr><td><strong>DSC</strong></td><td>蠍座</td><td>26°</td><td>パートナー像・求める相手</td></tr>
+    <tr><td><strong>IC</strong></td><td>獅子座</td><td>7°</td><td>内面の基盤・家庭・ルーツ</td></tr>
+  </table></div>
+
+  <h2>天体位置</h2>
+  <div class="table-wrap"><table>
+    <tr><th>天体</th><th>位置</th><th>ハウス</th></tr>
+    <tr><td>☉ 太陽</td><td>射手座 24°</td><td>8H</td></tr>
+    <tr><td>☽ 月</td><td>獅子座 17°</td><td>4H</td></tr>
+    <tr><td>☿ 水星</td><td>射手座 12°</td><td>8H</td></tr>
+    <tr><td>♀ 金星</td><td>蠍座 8°</td><td>7H</td></tr>
+    <tr><td>♂ 火星</td><td>蠍座 20°</td><td>7H</td></tr>
+    <tr><td>♃ 木星</td><td>天秤座 14°</td><td>6H</td></tr>
+    <tr><td>♄ 土星</td><td>蟹座 25° R</td><td>3H</td></tr>
+    <tr><td>♅ 天王星</td><td>魚座 3°</td><td>11H</td></tr>
+    <tr><td>♆ 海王星</td><td>水瓶座 13°</td><td>10H</td></tr>
+    <tr><td>♇ 冥王星</td><td>射手座 21°</td><td>8H</td></tr>
+  </table></div>
+
+  <h2>各天体の詳細解読</h2>
+
+  <details class="accordion">
+    <summary>ASC 牡牛座 26° — 第一印象のペルソナ</summary>
+    <div class="acc-body">
+      <h4>穏やかで安定感のある第一印象</h4>
+      <p>牡牛座ASCは、初対面の人に<strong>落ち着いた・温かい・安心感がある</strong>という印象を与える。五感が非常に鋭く、美的センスが高い。食べ物・音楽・触り心地など、感覚的な体験に深い喜びを感じる。</p>
+      <p>INFPの内面の繊細さとは対照的に、外見上は<strong>どっしりと構えた安定感</strong>が出る。これがINFP特有の「何を考えているかわからない」と言われる原因の一つ。内面では嵐が吹いていても、牡牛座ASCが穏やかな表情を保たせる。</p>
+      <div class="golden-box">
+        <div class="title">INFPとの統合</div>
+        <p style="font-size:12px;color:var(--text-muted);">Fi主機能の深い感情世界を、牡牛座ASCが「安全な殻」で包んでいる。自分の世界に入り込みやすいが、外からはそれが「マイペースで落ち着いた人」に見える。</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>MC 水瓶座 7° — キャリアの方向性</summary>
+    <div class="acc-body">
+      <h4>革新と独自性を社会に示す</h4>
+      <p>MC水瓶座は、社会的な到達点として<strong>独自の道を切り拓く</strong>ことを示す。既存の枠組みに収まらず、自分なりの方法で社会に貢献することが天命。</p>
+      <p>海王星が10Hにあることで、MC水瓶座の革新性に<strong>スピリチュアルな直感・芸術性</strong>が加わる。「普通の仕事」ではなく、理想やビジョンを形にするような仕事で輝く。</p>
+      <ul>
+        <li>既存のルールに縛られない働き方が合う</li>
+        <li>人道的・社会貢献的な要素があると動機が強まる</li>
+        <li>INFPのFi+Neが「自分だけの革新的なやり方」を生み出す</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>DSC 蠍座 26° — パートナー像</summary>
+    <div class="acc-body">
+      <h4>深い絆と変容を求める関係性</h4>
+      <p>DSC蠍座は、パートナーに<strong>深さ・情熱・真剣さ</strong>を求めることを示す。表面的な関係には全く興味がなく、魂レベルでつながれる相手を無意識に探している。</p>
+      <p>金星と火星がどちらも蠍座7H（パートナーシップのハウス）にあるため、この傾向は極めて強い。恋愛において<strong>「全か無か」</strong>の傾向がある。</p>
+      <div class="danger-box">
+        <div class="title">注意点</div>
+        <p style="font-size:12px;color:var(--text-muted);">蠍座の「深さ」は、時に執着や独占欲に変わることがある。INFPのFiは自分の価値観に固執しやすく、蠍座DSCと重なると「理想のパートナー像」から外れた相手を受け入れにくくなる。</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>IC 獅子座 7° — 内面の基盤</summary>
+    <div class="acc-body">
+      <h4>自己表現と創造性の根っこ</h4>
+      <p>IC獅子座は、内面の最も深い部分に<strong>自己表現への強い欲求・創造的なエネルギー・自分が特別でありたいという願望</strong>があることを示す。</p>
+      <p>月が獅子座4Hにあることでこの傾向が強化される。家庭環境が感情の基盤であり、<strong>家の中では本来の華やかさ・表現力が解放される</strong>。外ではINFPらしく控えめでも、親しい人の前では別人のように表現豊かになる。</p>
+      <ul>
+        <li>安心できる空間では創造性が爆発する</li>
+        <li>「認められたい」という根源的な欲求が隠れている</li>
+        <li>家庭やプライベート空間が心の安定に直結する</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>射手座ステリウム (8H) — 太陽+水星+冥王星</summary>
+    <div class="acc-body">
+      <h4>深層心理への探求と変容</h4>
+      <p>太陽・水星・冥王星が全て射手座の8H（変容・深層心理・他者との深い結びつき）に集中している。これは<strong>極めて強力な配置</strong>。</p>
+      <p>射手座の「真理を追求する」エネルギーが8Hの「深層・タブー・変容」に向かう。<strong>表面的な知識では満足できず、物事の本質を徹底的に掘り下げる</strong>。人の心理、生死、哲学、神秘的なテーマに強い関心を持つ。</p>
+      <div class="card highlight" style="margin-top:10px;">
+        <p style="font-size:13px;"><strong>表層と深層のギャップ</strong></p>
+        <p style="font-size:12px;color:var(--text-muted);">射手座は本来「明るい・楽観的・自由」のイメージだが、8Hに入ることで深層心理に潜る。周囲には明るく見えても、内側では常に深いテーマと向き合っている。INFPのFi主機能が「自分とは何か」を問い続けるのと共鳴する。</p>
+      </div>
+      <ul>
+        <li><strong>太陽 8H</strong>: 自己のアイデンティティが「変容」を通じて確立される</li>
+        <li><strong>水星 8H</strong>: 思考が深層に向かう。心理学・哲学との相性が極めて良い</li>
+        <li><strong>冥王星 8H</strong>: 冥王星は8Hの支配星。変容のテーマが二重に強調される</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>月 獅子座 4H — 感情の表現欲求</summary>
+    <div class="acc-body">
+      <h4>内面の華やかさと感情の家庭依存</h4>
+      <p>月は「感情・無意識・本能的な反応」を表す。獅子座の月は、<strong>感情が華やかでドラマチック</strong>。喜怒哀楽が大きく、クリエイティブな自己表現を通じて感情を処理する。</p>
+      <p>4H（家庭・ルーツ）にあるため、<strong>家庭が感情の安定に直結</strong>する。家や安心できる場所が乱れると、感情全体が不安定になりやすい。</p>
+      <div class="golden-box">
+        <div class="title">INFPとの統合</div>
+        <p style="font-size:12px;color:var(--text-muted);">INFPのFiは感情を内側で深く処理するが、獅子座の月は「表現したい」と叫ぶ。この内的な葛藤が、アート・文章・音楽などの創造活動への原動力になる。情動安定性90%が、この華やかな感情を制御する「安全弁」として機能している。</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>金星 蠍座 7H — 深く一途な愛</summary>
+    <div class="acc-body">
+      <h4>パートナーシップにおける魂の結合</h4>
+      <p>金星蠍座は<strong>愛情表現が極めて深く、一途で、全身全霊</strong>。好きになったら中途半端な関係は許せない。パートナーとの間に「魂の絆」を求める。</p>
+      <p>7H（パートナーシップ）に位置することで、この深い愛はまさに<strong>恋愛・結婚のパートナー</strong>に向かう。恋愛は人生の重要テーマ。</p>
+      <ul>
+        <li>一度信頼した相手には全てを見せられる</li>
+        <li>裏切りや不誠実は絶対に許せない</li>
+        <li>愛情の深さゆえに嫉妬心も強くなりやすい</li>
+        <li>「溺愛系 不思議生命体」のLobeTypeと完全に一致</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>火星 蠍座 7H — 情熱的な行動力</summary>
+    <div class="acc-body">
+      <h4>パートナーシップへの強烈な意志</h4>
+      <p>火星蠍座は<strong>行動力が集中的で、一度決めたら徹底的にやり抜く</strong>。7Hに位置するため、パートナーを守るため・関係を深めるための行動力が非常に強い。</p>
+      <p>金星蠍座7Hと合わせて、パートナーシップのハウスに蠍座の金星と火星が揃う。これは<strong>恋愛に対するエネルギーが極めて強い配置</strong>。受け身に見えるINFPの中に、恋愛に関しては驚くほどの積極性と情熱が隠れている。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>土星 蟹座 R 3H — 感情表現の課題</summary>
+    <div class="acc-body">
+      <h4>感情を言葉にする困難と家族のテーマ</h4>
+      <p>土星蟹座は<strong>感情表現に制限がかかる</strong>配置。蟹座は感情・ケア・家庭を司るが、そこに土星（制限・試練）が入ることで、感情を素直に出すことに苦手意識がある。</p>
+      <p><strong>逆行（R）</strong>しているため、この課題は特に<strong>内面で繰り返される</strong>。「気持ちを伝えたいのに、うまく言葉にできない」という経験が多い。</p>
+      <p>3H（コミュニケーション）に位置するため、<strong>日常的なコミュニケーションでの感情表現</strong>が特に課題となる。文章では表現できても、口頭で気持ちを伝えることにハードルを感じやすい。</p>
+      <div class="danger-box">
+        <div class="title">INFPとの統合</div>
+        <p style="font-size:12px;color:var(--text-muted);">INFPのFi主機能は感情を内側で深く処理するが、Te劣等で外への表現が苦手。土星蟹座R 3Hがこの傾向をさらに強める。感情を溜め込みやすいパターンに注意が必要。</p>
+      </div>
+    </div>
+  </details>
+
+  <h2>ネイタルアスペクト — 性格の統合パターン</h2>
+  <p style="font-size:13px;color:var(--text-muted);">自分のチャート内での天体同士の関係が、性格の統合パターンを示す。</p>
+
+  <div class="card">
+    <div class="table-wrap"><table>
+      <tr><th>アスペクト</th><th>意味</th></tr>
+      <tr><td>☉ conjunct ♇（3°）</td><td>太陽と冥王星が同座。強烈な変容力・深い洞察力。表面には出ないが、内側に圧倒的なエネルギーを秘める</td></tr>
+      <tr><td>☉ conjunct ☿（12°）</td><td>太陽と水星が同座。思考と自己像が一致。自分の考えを言語化する力</td></tr>
+      <tr><td>♀ conjunct ♂（12°）</td><td>金星と火星が蠍座で合。愛と行動が一体化。恋愛に対する強烈な情熱と一途さ</td></tr>
+      <tr><td>☽ square ♀（9°）</td><td>月と金星がスクエア。感情と愛情表現の間に緊張。「本当はこうしたい」と「実際にできること」のギャップ</td></tr>
+      <tr><td>♄ opposite ☉（1°・タイト）</td><td>土星と太陽がオポジション。自己表現への抑制。若い頃は苦労するが、年齢とともに深みが増す大器晩成型</td></tr>
+      <tr><td>♅ trine ☽（14°）</td><td>天王星と月がトライン。感情表現に独自性。既存の枠に収まらない感受性</td></tr>
+    </table></div>
+  </div>
+
+  <h2>総括</h2>
+  <blockquote>
+    穏やかな牡牛座ASCの殻の中に、射手座の探求心と蠍座の深い情熱を併せ持つ、極めて多層的な内面構造。表面は落ち着いて見えても、8Hのステリウムが「変容と深層心理」を常に追求し、蠍座7Hの金星・火星が「魂レベルの愛」を求めている。INFPの繊細な内面世界が、ホロスコープの配置と見事に共鳴している。
+  </blockquote>
+</div>
+
+<!-- ===== TAB: ストレス＆地雷 ===== -->
+<div class="tab-content" id="stress-map">
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>「何にストレスを感じるか」「何をされると壊れるか」「ストレス時にどう変化するか」を全診断データを統合して分析します。ストレスの構造的原因と回復方法がわかります。</p>
+  </div>
+
+  <h2>ストレス反応の全体像</h2>
+  <div class="card highlight">
+    <h4>INFP + 9w1 + IEE 統合ストレスプロファイル</h4>
+    <p>3つの体系が示すストレスパターンには共通点がある：<strong>「内側に溜め込み、表面上は平穏を装い、限界を超えると突然シャットダウンする」</strong>。</p>
+    <div class="table-wrap"><table>
+      <tr><th>体系</th><th>ストレス時の特徴</th></tr>
+      <tr><td>INFP</td><td>Fi主機能が傷つくと内側に閉じこもる。Te劣等が暴走し、突然攻撃的・論理的になる</td></tr>
+      <tr><td>9w1</td><td>不快感を無視し「大丈夫」で済ませる → 限界でタイプ6化（不安・疑心暗鬼）</td></tr>
+      <tr><td>IEE</td><td>Si苦点がストレスで最初に崩れる → 体調不良・生活リズム崩壊</td></tr>
+    </table></div>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">情動安定性90%と-Aの安定感が「限界に気づくタイミングを遅らせる」ため、<strong>周囲から見て突然崩れたように見える</strong>のが最大の特徴。本人も限界に気づいていないことが多い。</p>
+  </div>
+
+  <h2>ストレスの段階的進行</h2>
+  <div class="flow-step main"><strong>Stage 1：受動的抵抗</strong><br>意見を言わず内に溜める。笑顔で「大丈夫」と言いながら、内側で不満を蓄積。表面は穏やかだが、返信が遅くなる・話題を避けるなどの微細なサインが出る。<br><span class="tag info">タイプ9</span> <span class="tag info">Fi内向</span></div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step alt"><strong>Stage 2：不安と疑心暗鬼</strong><br>タイプ9がストレスでタイプ6方向に分裂。「もしかして嫌われた？」「自分が悪いのかも」「最悪の事態が起きるかも」と不安が増大。普段の楽観性が消え、ネガティブな可能性ばかりが頭を占める。<br><span class="tag warn">9→6分裂</span> <span class="tag warn">Ne暴走</span></div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step danger"><strong>Stage 3：完全撤退</strong><br>全てのエネルギーが枯渇し、引きこもり・連絡遮断に至る。IEEのSi苦点が崩壊し、体調不良・生活リズム崩壊が同時発生。ここまで来ると回復に長時間を要する。突然のTe暴走（「全部やめる」「もういい」という極端な決断）が出ることもある。<br><span class="tag bad">Si崩壊</span> <span class="tag bad">Te暴走</span> <span class="tag bad">完全遮断</span></div>
+
+  <h2>地雷マップ</h2>
+  <div class="table-wrap"><table>
+    <tr><th>地雷</th><th>根拠</th><th>具体的な反応</th></tr>
+    <tr><td><strong>価値観の否定</strong></td><td>Fi主機能への直接攻撃</td><td>表面は黙るが、内側で相手を完全に「切る」判定が下される。二度と心を開かない</td></tr>
+    <tr><td><strong>強制的な決断要求</strong></td><td>タイプ9 + Ne = 熟考が必要</td><td>焦りとパニック → フリーズ → 的外れな決断をしてしまい、後悔する</td></tr>
+    <tr><td><strong>表面的な関係の強要</strong></td><td>Fi+Ne = 深さを求める</td><td>「意味がない」と感じた瞬間に心がシャットダウン。物理的にはいるが、精神的には不在</td></tr>
+    <tr><td><strong>自分のペースの侵害</strong></td><td>IEEのSi苦点</td><td>生活リズムやルーティンを乱されると、予想外に強いストレス反応が出る</td></tr>
+    <tr><td><strong>不誠実な態度</strong></td><td>デルタクワドラの価値観</td><td>嘘や二枚舌を感知すると、信頼が根底から崩壊。修復はほぼ不可能</td></tr>
+    <tr><td><strong>個性の否定</strong></td><td>Ne+Fi+月獅子座</td><td>「普通にしなよ」「みんなそうだよ」→ 存在の根幹を否定されたと感じる</td></tr>
+  </table></div>
+
+  <h2>絶対に踏んではいけない地雷 TOP3</h2>
+
+  <div class="card red">
+    <h4>1. 価値観・信念の嘲笑</h4>
+    <p>Fi主機能にとって、自分の価値観は「自分そのもの」。それを笑われたり軽視されたりすることは、存在の全否定に等しい。情動安定90%により表面には出ないが、<strong>内側で「この人は味方ではない」という最終判定が下される</strong>。この判定が覆ることはほぼない。</p>
+  </div>
+
+  <div class="card red">
+    <h4>2. 裏切り・不誠実</h4>
+    <p>デルタクワドラの核心は「誠実さ」。金星蠍座7Hの「全か無か」の愛情スタイルと合わさり、信頼した相手の裏切りは<strong>最も深い傷</strong>を残す。許すことはできるかもしれないが、信頼を戻すことはできない。「許すけど、もう前の関係には戻れない」。</p>
+  </div>
+
+  <div class="card red">
+    <h4>3. 感情の強制的な暴露</h4>
+    <p>「本当はどう思ってるの？」「隠さないで言って」と詰め寄られること。INFPの感情は言語化に時間がかかる。土星蟹座R 3Hが感情表現にブレーキをかけている。<strong>急かされると、本心とは違うことを言ってしまい、さらに自己嫌悪に陥る</strong>悪循環が生まれる。</p>
+  </div>
+
+  <h2>ストレスからの回復パターン</h2>
+  <div class="card green">
+    <h4>効果的な回復方法</h4>
+    <ul>
+      <li><strong>完全な一人の時間</strong> — 誰にも邪魔されない空間でFiを回復させる。最低でも数時間は必要</li>
+      <li><strong>創造的な活動</strong> — 絵を描く・文章を書く・音楽を聴く。Fi+月獅子座の感情処理</li>
+      <li><strong>自然の中での散歩</strong> — 射手座の自由欲求 + 牡牛座ASCの五感回復</li>
+      <li><strong>信頼できる人との深い対話</strong> — ただし「聴いてくれる」人限定。アドバイスは逆効果</li>
+      <li><strong>身体感覚へのケア</strong> — 好きな食べ物・温かいお風呂・心地よい音楽（Si苦点の補充）</li>
+    </ul>
+  </div>
+  <div class="card red">
+    <h4>逆効果になること</h4>
+    <ul>
+      <li><strong>「元気出して」「考えすぎだよ」</strong> — 感情の矮小化。Fi主機能にとって最悪の対応</li>
+      <li><strong>無理やり外出させる</strong> — 回復にはまず内向の時間が必要</li>
+      <li><strong>問題の原因を追及する</strong> — 「なんでそうなったの？」はTe劣等を刺激して悪化させる</li>
+      <li><strong>「みんなも大変だよ」</strong> — 個人的な感情をFe的に一般化されることへの拒否反応</li>
+      <li><strong>解決策の押しつけ</strong> — 「こうすればいいじゃん」はTe的アプローチ。まず感情の受容が先</li>
+    </ul>
+  </div>
+
+  <h2>周囲の人への取扱説明書</h2>
+  <div class="card">
+    <h4>Do / Don't</h4>
+    <div class="magic-row">
+      <div class="magic-good"><strong>Do: 静かに寄り添う</strong><br>「話したくなったらいつでも聞くよ」と伝えて待つ</div>
+      <div class="magic-bad"><strong>Don't: 問い詰める</strong><br>「何が不満なの？」「ちゃんと言ってよ」</div>
+    </div>
+    <div class="magic-row">
+      <div class="magic-good"><strong>Do: 感情を認める</strong><br>「辛いよね」「そう感じるのは当然だよ」</div>
+      <div class="magic-bad"><strong>Don't: 論理で説得</strong><br>「冷静に考えたら〜」「客観的に見て〜」</div>
+    </div>
+    <div class="magic-row">
+      <div class="magic-good"><strong>Do: 選択肢を提示</strong><br>「こんな方法もあるけど、どう思う？」</div>
+      <div class="magic-bad"><strong>Don't: 決断を迫る</strong><br>「今すぐ決めて」「どっちなの？」</div>
+    </div>
+    <div class="magic-row">
+      <div class="magic-good"><strong>Do: 日常のケア</strong><br>温かい飲み物を入れる、好きな音楽をかける</div>
+      <div class="magic-bad"><strong>Don't: 大勢の中に出す</strong><br>「気分転換に飲み会行こう」は逆効果</div>
+    </div>
+  </div>
+
+  <h2>総括</h2>
+  <blockquote>
+    最大の注意点は「本人も周囲も限界に気づくのが遅い」こと。情動安定90%と-Aの安定感が「大丈夫」の仮面を強固にしている。表面が穏やかなうちに、微細なサイン（返信の遅れ・話題の回避・笑顔の硬さ）を見逃さないことが、Stage 3への進行を防ぐ唯一の方法。
+  </blockquote>
+</div>
+
+<!-- ===== TAB: 影の自己分析 ===== -->
+<div class="tab-content" id="shadow">
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>普段は意識しない「影（シャドウ）」の側面を分析し、ストレス下や無意識に現れる別の自分を読み解きます。ユングの8機能モデルに基づく分析です。</p>
+  </div>
+
+  <h2>シャドウとは</h2>
+  <div class="card">
+    <p>ユングの8機能モデルでは、普段使う4つの機能（Hero/Parent/Child/Inferior）の裏側に、<strong>影の4機能</strong>が存在する。これらは普段は無意識に抑圧されているが、ストレス・危機・深い感情的揺さぶりの場面で表面に浮上する。</p>
+    <p style="margin-top:8px;"><strong>影の機能は「敵」ではなく「統合すべきもう一人の自分」</strong>。影を知ることは、自分の全体像を理解する最も深い方法の一つ。</p>
+  </div>
+
+  <h2>INFPのシャドウ機能</h2>
+  <div class="card highlight">
+    <div class="code-block">【表の自己 — 意識】
+1. Fi（Hero / 英雄）     — 価値観の羅針盤
+2. Ne（Parent / 良い親）  — 可能性の探索
+3. Si（Child / 子供）     — 過去の記憶・安定
+4. Te（Inferior / 劣等）  — 効率・論理（最弱）
+
+【影の自己 — 無意識】
+5. Fe（Opposing / 対抗）  — Fiの影
+6. Ni（Critical Parent / 批判的な親）— Neの影
+7. Se（Trickster / 欺き） — Siの影
+8. Ti（Demon / 悪魔）     — Teの影</div>
+  </div>
+
+  <details class="accordion">
+    <summary>5. Fe（対抗）— 集団感情への抵抗</summary>
+    <div class="acc-body">
+      <h4>Fi（内向感情）の影としてのFe（外向感情）</h4>
+      <p>Feは「集団の感情・雰囲気・社会的調和」を司る。Fi主機能のINFPにとって、Feは<strong>「自分の価値観ではなく、集団の空気に合わせること」</strong>を意味し、深い抵抗感がある。</p>
+      <ul>
+        <li>「みんなが楽しそうだから自分も楽しいふりをする」ことへの嫌悪</li>
+        <li>社会的に「正しい」感情表現を強要されることへの反発</li>
+        <li>ストレス時に突然Fe的に爆発 — 「なんでみんなわかってくれないの！」と集団に感情をぶつける</li>
+        <li>IEEのFe（背景機能/8番）とも一致 — 場の空気は読めるが、能動的にコントロールしない</li>
+      </ul>
+      <div class="golden-box">
+        <div class="title">統合のヒント</div>
+        <p style="font-size:12px;color:var(--text-muted);">Fe的な「場の調和」を全否定するのではなく、Fi的な「個人の真実」とバランスを取る。「場に合わせること」と「自分を偽ること」は違うと理解することが統合の鍵。</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>6. Ni（批判的な親）— 暗い未来予測</summary>
+    <div class="acc-body">
+      <h4>Ne（外向直観）の影としてのNi（内向直観）</h4>
+      <p>Niは「一つの未来像への収束・深い意味の洞察・長期ビジョン」を司る。Ne補助のINFPにとって、Niは<strong>「可能性を広げる」の正反対 —「一つの暗い結論に収束する」</strong>形で現れやすい。</p>
+      <ul>
+        <li>ストレス時に「この先こうなるに違いない」と暗い未来を確信する</li>
+        <li>「あの時ああしていれば」と過去の意味を否定的に再解釈する</li>
+        <li>タイプ9→6分裂と共鳴し、<strong>最悪の未来シナリオが「確定した事実」のように感じる</strong></li>
+        <li>普段のNeの楽観性が、Ni影に呑まれると完全に反転する</li>
+      </ul>
+      <div class="danger-box">
+        <div class="title">要注意パターン</div>
+        <p style="font-size:12px;color:var(--text-muted);">「どうせうまくいかない」「何をやっても無駄」という思考が現れたら、それはNi影の発動サイン。Neの「他にも可能性がある」を意識的に起動させることが対処法。</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>7. Se（欺き）— 衝動的な行動</summary>
+    <div class="acc-body">
+      <h4>Si（内向感覚）の影としてのSe（外向感覚）</h4>
+      <p>Seは「現実への即座の介入・五感の刺激・今この瞬間の体験」を司る。Si第三機能のINFPにとって、Seは<strong>最も制御不能な形で現れる</strong>。「欺き（Trickster）」の名の通り、本人を騙す。</p>
+      <ul>
+        <li>ストレスが極限に達した時、突然衝動的な行動に出る（衝動買い・暴食・自暴自棄な行動）</li>
+        <li>「もういいや」と全てを投げ出し、破壊的な選択をしてしまう</li>
+        <li>IEEのSe（示唆機能/5番）とも関連 — 「押しの強さ」を他者に求めるが、自分で発動すると制御不能になる</li>
+        <li>普段は穏やかな分、Se発動時のギャップが大きく、周囲が驚く</li>
+      </ul>
+      <div class="golden-box">
+        <div class="title">統合のヒント</div>
+        <p style="font-size:12px;color:var(--text-muted);">Seのエネルギーを「破壊」ではなく「体験」に向ける。スポーツ・料理・自然の中での五感体験など、意識的にSeを小出しに使う練習が、暴走を防ぐ。</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>8. Ti（悪魔）— 冷酷な内的論理</summary>
+    <div class="acc-body">
+      <h4>Te（外向思考）の影としてのTi（内向思考）</h4>
+      <p>Tiは「内的な論理体系・分析・真理の追求」を司る。Te劣等のINFPにとって、Tiは<strong>最も深い無意識の底に眠る機能</strong>。「悪魔（Demon）」の名の通り、発動時は最も破壊的。</p>
+      <ul>
+        <li>極限ストレス時に「冷徹な内的論理」が起動し、全てを分析的に切り捨てる</li>
+        <li>「この関係には論理的に意味がない」「感情なんて無意味だ」と、Fiとは正反対の思考が出る</li>
+        <li>普段のFi的な温かさが完全に消え、<strong>冷たく正確な解剖者</strong>のような人格が現れる</li>
+        <li>IEEのTi（動員機能/6番）とも関連 — 論理的な体系化を受け取ると活性化するが、自己発動すると暴走する</li>
+      </ul>
+      <div class="danger-box">
+        <div class="title">要注意パターン</div>
+        <p style="font-size:12px;color:var(--text-muted);">Ti悪魔が発動している時の決断は、必ず後悔する。「今の自分はTiに乗っ取られている」と自覚できるかどうかが分かれ目。大きな決断は、この状態が収まるまで絶対に保留すべき。</p>
+      </div>
+    </div>
+  </details>
+
+  <h2>影が発動するパターン</h2>
+  <div class="card">
+    <h4>トリガーと発動する影</h4>
+    <div class="table-wrap"><table>
+      <tr><th>トリガー</th><th>発動する影</th><th>現れ方</th></tr>
+      <tr><td>集団の同調圧力</td><td>Fe（対抗）</td><td>「なんで合わせなきゃいけないの」と内心で激しく反発</td></tr>
+      <tr><td>将来への不安</td><td>Ni（批判的親）</td><td>暗い未来像が確定事実のように感じる</td></tr>
+      <tr><td>極度の疲労・限界</td><td>Se（欺き）</td><td>衝動的で破壊的な行動に出る</td></tr>
+      <tr><td>信頼の裏切り</td><td>Ti（悪魔）</td><td>冷徹に関係を「論理的に無意味」と切り捨てる</td></tr>
+    </table></div>
+  </div>
+
+  <h2>影との統合</h2>
+  <div class="card gold">
+    <h4>影は「敵」ではなく「もう一人の自分」</h4>
+    <p>影の機能を完全に否定するのではなく、<strong>意識的に少量ずつ使う練習</strong>が統合への道。</p>
+    <ul>
+      <li><strong>Fe</strong>: 場の空気に合わせることも、時には自分を守る手段になる</li>
+      <li><strong>Ni</strong>: 暗い予測も、リスク管理として建設的に使える</li>
+      <li><strong>Se</strong>: 身体感覚を意識的に楽しむ時間を作る（料理・散歩・運動）</li>
+      <li><strong>Ti</strong>: 感情に振り回されそうな時、一歩引いて論理的に整理する力として活用する</li>
+    </ul>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">影の統合は一生かかるプロセス。完璧を目指す必要はない。「あ、今Ni影が出てるな」と<strong>気づけること自体が、すでに統合の第一歩</strong>。</p>
+  </div>
+
+  <h2>総括</h2>
+  <blockquote>
+    表のINFPが「温かく・穏やかで・理想を追う人」なら、影のINFPは「冷たく・衝動的で・全てを否定する人」。この二面性を知ることが、本当の自己理解の始まり。影を恐れるのではなく、影も含めて自分であると認められた時、INFPの内面世界は最も豊かになる。
+  </blockquote>
+</div>
+
+<!-- ===== TAB: INFP自己分析 ===== -->
+<div class="tab-content" id="infp-self">
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>固有の認知機能パターンと内面の葛藤を深掘りし、自己理解を深めるための分析です。全診断データを統合し、「なぜ自分はこうなのか」を構造的に解剖します。</p>
+  </div>
+
+  <h2>INFP-Aの自画像</h2>
+  <div class="card highlight">
+    <p>INFPは16タイプの中で最も<strong>内面世界が豊か</strong>なタイプとされる。頭の中には常に物語・イメージ・価値観の海が広がっており、現実世界はその内面世界を通して「意味付け」された形で認識される。</p>
+    <p style="margin-top:8px;">しかしINFP-Aは通常のINFP(-T)と大きく異なる。<strong>繊細さと安定感が共存する</strong>という、本来矛盾する性質を併せ持つ。情動安定性90%が「傷つきやすいが、傷に耐えられる」という独自のレジリエンスを形成している。</p>
+    <div class="data-grid" style="margin-top:12px;">
+      <div class="data-item"><strong>MBTI</strong><br>INFP-A</div>
+      <div class="data-item"><strong>ソシオニクス</strong><br>IEE-Q</div>
+      <div class="data-item"><strong>エニアグラム</strong><br>9w1</div>
+      <div class="data-item"><strong>情動安定性</strong><br>90%</div>
+    </div>
+  </div>
+
+  <h2>Fi主導が作る内面世界</h2>
+  <div class="card">
+    <p>Fi（内向感情）が主機能ということは、<strong>全ての体験が「自分にとっての意味」というフィルターを通して処理される</strong>ということ。客観的な事実よりも、「それが自分にとってどんな意味があるか」が常に最優先される。</p>
+    <h4 style="margin-top:12px;">Fiが作る世界の特徴</h4>
+    <ul>
+      <li>全ての人・出来事・体験に「意味のラベル」が貼られている</li>
+      <li>価値観と合わないものには、静かだが強固な壁が立てられる</li>
+      <li>感情は「感じる」だけでなく「味わう」もの — 悲しみですら美しいと感じることがある</li>
+      <li>他者の感情も自分のFiで処理するため、「共感」というより「共鳴」に近い</li>
+      <li>内面世界が豊かすぎて、外の世界が「物足りない」と感じることがある</li>
+    </ul>
+  </div>
+
+  <h2>INFPの理想と現実のギャップ</h2>
+  <div class="card">
+    <p>Fi+Neの組み合わせは「理想の世界を鮮明に思い描く力」を生む。しかし、その理想は<strong>現実には存在しないほど純粋で完全なもの</strong>であることが多い。</p>
+    <div class="table-wrap"><table>
+      <tr><th>理想（Fi+Ne）</th><th>現実</th><th>ギャップの影響</th></tr>
+      <tr><td>全ての人が本音で向き合う世界</td><td>社交辞令と建前の世界</td><td>「なぜみんな嘘をつくのか」という静かな絶望</td></tr>
+      <tr><td>深い魂のつながりがある恋愛</td><td>日常の些細なすれ違い</td><td>「もっと深くつながりたいのに」という渇望</td></tr>
+      <tr><td>意味のある仕事で社会に貢献</td><td>雑務・ルーティン・効率要求</td><td>「これは自分がやるべきことなのか」という疑問</td></tr>
+      <tr><td>自分の感情を完全に理解してくれる人</td><td>誰も100%は理解できない</td><td>「結局、最後は一人なのか」という孤独感</td></tr>
+    </table></div>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">ただし情動安定性90%がこのギャップを「耐えられるレベル」に保っている。INFP-Tなら深い苦悩になるところを、INFP-Aは「まあ、そういうものか」と受け流せる強さがある。</p>
+  </div>
+
+  <h2>「A」が与えるINFPへの影響</h2>
+  <div class="card gold">
+    <h4>INFP-Aは全INFPの中でも少数派</h4>
+    <p>INFPの大多数は-T（Turbulent/繊細型）。-A（Assertive/主張型）は珍しく、情動安定性90%がその根拠。通常INFPが陥りやすい「繊細すぎて疲弊する」パターンに対して、<strong>-Aが鎧を着せている</strong>。</p>
+    <div class="table-wrap" style="margin-top:12px;"><table>
+      <tr><th>場面</th><th>INFP-T</th><th>INFP-A（自分）</th></tr>
+      <tr><td>批判を受けた時</td><td>深く傷つき、長く引きずる</td><td>傷つくが、比較的早く回復する</td></tr>
+      <tr><td>失敗した時</td><td>自己否定のスパイラル</td><td>「次はこうしよう」と切り替えられる</td></tr>
+      <tr><td>対立場面</td><td>回避し、後で一人で泣く</td><td>回避するが、内面は安定を保てる</td></tr>
+      <tr><td>不確実な状況</td><td>不安に圧倒される</td><td>「なんとかなる」と楽観的に構える</td></tr>
+    </table></div>
+    <div class="danger-box" style="margin-top:12px;">
+      <div class="title">-Aの落とし穴</div>
+      <p style="font-size:12px;color:var(--text-muted);">安定感が高いため、<strong>「本当に傷ついている自分」に気づくのが遅れる</strong>。-Tは傷を即座に感じるからこそ、早期に対処できる。-Aは傷に気づかないまま蓄積し、ある日突然限界を迎える。「自分は大丈夫」が最大の盲点。</p>
+    </div>
+  </div>
+
+  <h2>INFPが陥りやすい5つのパターン</h2>
+
+  <details class="accordion">
+    <summary>1. 理想化 → 幻滅サイクル</summary>
+    <div class="acc-body">
+      <p>Ne+Fiが<strong>人や状況を理想化</strong>する。「この人は特別だ」「この仕事こそ自分の天職だ」と感じると、内面で壮大な物語が構築される。しかし現実は理想通りにならない。理想と現実のギャップが広がると、「こんなはずじゃなかった」という幻滅が訪れる。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 理想を持つこと自体は悪くない。問題は「理想=現実になるべきもの」と無意識に信じていること。理想は「方向性」であり「到達点」ではないと理解することで、幻滅のダメージを軽減できる。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>2. 決断の先延ばし</summary>
+    <div class="acc-body">
+      <p>Fi+タイプ9の「波風を立てたくない」+Neの「他にも可能性があるかも」が合わさり、<strong>重要な決断を先延ばしにする</strong>。選択することは何かを「捨てる」ことであり、Fiにとっては全ての選択肢に意味があるから捨てられない。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 「決めないこと」も一つの決断であり、それは「現状維持」を選んでいるということ。完璧な選択肢は存在しないと受け入れ、「70%でOK」のラインを設定する。勤勉性77%の意志力を、決断にも使う練習。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>3. 内面の豊かさ vs 表現の困難</summary>
+    <div class="acc-body">
+      <p>Fi主機能は内面に膨大な感情・価値観・物語を持っているが、Te劣等+土星蟹座R 3Hにより<strong>それを外に伝えることが構造的に困難</strong>。「自分が感じていることの10%も伝わっていない」という感覚が常にある。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 口頭での表現が苦手なら、文章・アート・音楽など別の表現手段を積極的に使う。「伝わらない」のはTe劣等のせいであり、自分の感情が薄いわけではないと理解すること。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>4. 人助けの消耗</summary>
+    <div class="acc-body">
+      <p>タイプ2スコア4+Fiの共感力+IEEのNe主導（人の可能性を見出す）が合わさり、<strong>他者のために自分を消耗する</strong>パターン。境界線が曖昧になり、相手の感情を自分のもののように背負ってしまう。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 「他者を助ける前に、まず自分のエネルギーを確認する」習慣をつける。Fi主機能にとって、自分の価値観と健全さを守ることは「利己的」ではなく「必要なこと」。空のコップから水は注げない。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>5. 90%の安定が隠す本当の感情</summary>
+    <div class="acc-body">
+      <p>情動安定性90%+-Aが、INFPの繊細さを<strong>「大丈夫」で覆い隠す</strong>。本人も「自分は傷つきにくい」と思い込んでいることがあるが、Fiは確実に感じている。表面に出さないだけで蓄積は進む。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 定期的に「自分は今、本当はどう感じているか？」と自問する時間を作る。日記や内省の習慣が有効。「大丈夫じゃないかもしれない」と認めること自体が、INFP-Aにとっては最も勇気のいる行為。</p>
+    </div>
+  </details>
+
+  <h2>INFPの成長戦略</h2>
+  <div class="card green">
+    <h4>Fi+Neの強みを活かしながら、Te+Siを補強する</h4>
+    <ul>
+      <li><strong>Te劣等の補強</strong>: 小さな目標を設定し、達成する経験を積む。「計画→実行→振り返り」のサイクルを意識的に回す</li>
+      <li><strong>Si第三機能の育成</strong>: ルーティンを「束縛」ではなく「安定の基盤」として捉え直す。小さな習慣から始める</li>
+      <li><strong>Fiの深化</strong>: 自分の価値観を言語化する練習。「なぜこれが大切なのか」を説明できるようになると、他者との橋渡しができる</li>
+      <li><strong>Neの建設的な活用</strong>: 可能性を広げるだけでなく、「この中で最も自分の価値観に合うものはどれか」と絞り込む練習</li>
+      <li><strong>影の統合</strong>: Fe・Ni・Se・Tiを少量ずつ意識的に使う。完璧を目指さず、「気づくこと」から始める</li>
+    </ul>
+  </div>
+
+  <h2>総括</h2>
+  <blockquote>
+    INFP-Aは「繊細さに鎧を着た理想主義者」。その鎧のおかげで世界と向き合えるが、鎧の下にある傷に気づくことを忘れてはいけない。内面世界の豊かさは最大の強み。それを外の世界に少しずつ表現していくことが、INFPの成長の核心にある。
+  </blockquote>
+</div>
+
+<!-- ===== TAB: 向いてる仕事 ===== -->
+<div class="tab-content" id="career">
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>MBTI・ソシオニクス・エニアグラム・ビッグファイブ・ホロスコープの全データから、最も力を発揮できる職業と働き方を分析します。「向いている仕事」だけでなく「避けるべき環境」も明確にします。</p>
+  </div>
+
+  <h2>適職分析の基盤</h2>
+  <div class="card">
+    <div class="table-wrap"><table>
+      <tr><th>根拠</th><th>特性</th><th>適職への影響</th></tr>
+      <tr><td>Fi主機能</td><td>価値観駆動・共感力</td><td>「意味のある仕事」でないと動機が持てない</td></tr>
+      <tr><td>Ne補助</td><td>可能性の探索・創造性</td><td>新しいアイデアや方法を生み出す仕事に適性</td></tr>
+      <tr><td>Te劣等</td><td>効率・管理が苦手</td><td>数値目標やKPI管理中心の仕事は消耗する</td></tr>
+      <tr><td>9w1</td><td>調和志向・完璧主義的</td><td>競争より協力、質を重視する環境が合う</td></tr>
+      <tr><td>勤勉性77%</td><td>意志力・継続力</td><td>興味がある分野なら高い持続力を発揮</td></tr>
+      <tr><td>MC水瓶座</td><td>革新・独自性</td><td>既存の枠にはまらない働き方が天命</td></tr>
+      <tr><td>海王星10H</td><td>芸術性・スピリチュアル</td><td>クリエイティブ・直感的な仕事との相性が高い</td></tr>
+    </table></div>
+  </div>
+
+  <h2>最適な職種 TOP5</h2>
+
+  <div class="type-item">
+    <div class="type-num">TOP 1</div>
+    <div class="type-title">カウンセラー / 心理士</div>
+    <div class="type-reason">Fi主機能の深い共感力+Neの「人の可能性を見出す力」が最大限に活かせる。タイプ9の穏やかさが安心感を与え、射手座8Hの深層心理への関心が専門的な知識への動機を作る。</div>
+    <div class="type-evidence">
+      <div class="ev-label">根拠データ</div>
+      <div class="ev-text">Fi(主)+Ne(補) / IEE Ne主導「人の潜在能力を見出す」 / 9w1の受容力 / 射手座ステリウム8H(深層心理) / 協調性57%</div>
+    </div>
+  </div>
+
+  <div class="type-item">
+    <div class="type-num">TOP 2</div>
+    <div class="type-title">クリエイティブライター / 作家</div>
+    <div class="type-reason">Fi+Neの組み合わせは「独自の物語を紡ぐ力」の源泉。月獅子座4Hの創造的な感情表現力、タイプ4スコア6の芸術的感性、土星蟹座R 3Hの「口頭表現の壁」が文章表現へのエネルギーを集中させる。</div>
+    <div class="type-evidence">
+      <div class="ev-label">根拠データ</div>
+      <div class="ev-text">Fi+Ne / 月獅子座4H(創造性) / タイプ4スコア6 / 土星蟹座R 3H(文章>口頭) / 創造性58% / IC獅子座</div>
+    </div>
+  </div>
+
+  <div class="type-item">
+    <div class="type-num">TOP 3</div>
+    <div class="type-title">UXデザイナー / UIデザイナー</div>
+    <div class="type-reason">Fiの「ユーザーへの深い共感」+Neの「新しい体験の可能性」+牡牛座ASCの美的センス。勤勉性77%が制作プロセスの持続力を支え、MC水瓶座の革新性がUI/UXの新しいアプローチを生む。</div>
+    <div class="type-evidence">
+      <div class="ev-label">根拠データ</div>
+      <div class="ev-text">Fi(ユーザー共感)+Ne(可能性) / ASC牡牛座(美的センス) / 勤勉性77% / MC水瓶座(革新) / 海王星10H(芸術性)</div>
+    </div>
+  </div>
+
+  <div class="type-item">
+    <div class="type-num">TOP 4</div>
+    <div class="type-title">動物関連職（獣医助手・動物看護師等）</div>
+    <div class="type-reason">Fiの共感力は人間だけでなく動物にも向かう。タイプ9の穏やかさが動物に安心感を与え、射手座の自然志向+牡牛座ASCの五感の鋭さが、動物の微細な変化を感じ取る力になる。</div>
+    <div class="type-evidence">
+      <div class="ev-label">根拠データ</div>
+      <div class="ev-text">Fi(共感) / 9w1(穏やかさ) / 射手座(自然志向) / ASC牡牛座(五感) / 情動安定90%(冷静さ)</div>
+    </div>
+  </div>
+
+  <div class="type-item">
+    <div class="type-num">TOP 5</div>
+    <div class="type-title">NPO / 社会起業家</div>
+    <div class="type-reason">Fiの「価値観駆動」+Neの「革新的な方法」+射手座の理想追求+MC水瓶座の「社会に独自の道を示す」使命。勤勉性77%が持続的な活動を支え、タイプ9の調和力がチームをまとめる。</div>
+    <div class="type-evidence">
+      <div class="ev-label">根拠データ</div>
+      <div class="ev-text">Fi(価値観駆動)+Ne(革新) / MC水瓶座(社会的使命) / 射手座(理想追求) / 9w1(調和) / 勤勉性77%</div>
+    </div>
+  </div>
+
+  <h2>避けるべき環境</h2>
+  <div class="card red">
+    <ul>
+      <li><strong>数値目標・KPI重視の営業職</strong> — Te劣等にとって最もストレスフルな環境。Fiの価値観と数値目標が衝突する</li>
+      <li><strong>厳格なヒエラルキー組織</strong> — タイプ9は上下関係の圧力に弱く、IEEは自由を奪われると枯れる</li>
+      <li><strong>ルーティン中心の事務職</strong> — Ne補助の「新しい刺激」の欠如が慢性的な退屈と消耗を生む</li>
+      <li><strong>対立・競争が日常の環境</strong> — タイプ9の調和志向と衝突。エネルギーが「仕事」ではなく「対人ストレス」に消費される</li>
+      <li><strong>スピードと効率だけを求められる環境</strong> — Fiの「意味と質」を追求する時間がないと、仕事に価値を見出せなくなる</li>
+    </ul>
+  </div>
+
+  <h2>理想の働き方</h2>
+  <div class="card highlight">
+    <ul>
+      <li><strong>自分のペースで深く取り組める</strong> — 締め切りはあっても、プロセスに裁量がある</li>
+      <li><strong>意味と価値を感じられる</strong> — 「なぜこの仕事をするのか」が自分の価値観と合っている</li>
+      <li><strong>少人数の信頼できるチーム</strong> — 大組織より、少数精鋭で深い関係を築ける環境</li>
+      <li><strong>創造性を発揮できる余地</strong> — 「自分なりのやり方」が許容される文化</li>
+      <li><strong>リモートワーク可能</strong> — 一人の時間（Fi回復）と協働の時間のバランスが取れる</li>
+      <li><strong>成長の実感がある</strong> — 射手座の「もっと高みへ」の欲求が満たされる</li>
+    </ul>
+  </div>
+
+  <h2>総括</h2>
+  <blockquote>
+    仕事選びの最優先基準は「意味があるかどうか」。給与や安定性よりも、Fiが「これは正しい」と感じられるかどうかが全てを決める。勤勉性77%の持続力があるからこそ、興味のある分野に集中すれば高い成果を出せる。MC水瓶座が示す通り、既存の枠にはまらない独自のキャリアパスこそが天命。
+  </blockquote>
+</div>
+
+<!-- ===== TAB: 好きなタイプ ===== -->
+<div class="tab-content" id="my-type">
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>全診断データから「無意識に惹かれるタイプ」と「本当に相性が良いタイプ」を分析します。惹かれる理由と相性が良い理由が異なることを構造的に解明します。</p>
+  </div>
+
+  <h2>無意識に惹かれるタイプ</h2>
+  <div class="card highlight">
+    <h4>Te劣等への投影 + DSC蠍座 + Se示唆</h4>
+    <div class="table-wrap"><table>
+      <tr><th>惹かれる特徴</th><th>根拠</th></tr>
+      <tr><td>知的でミステリアス</td><td>射手座8Hの「深層への関心」+ Neの「隠された可能性」への惹かれ</td></tr>
+      <tr><td>自分の世界を持っている</td><td>Fi主機能が「独自の価値観」を持つ人を尊敬する</td></tr>
+      <tr><td>リーダーシップがある</td><td>Te劣等の投影 — 自分に欠けている「決断力・実行力」を相手に求める</td></tr>
+      <tr><td>情熱的で深い</td><td>DSC蠍座+金星蠍座7H — 表面的な人には興味がない</td></tr>
+      <tr><td>押しが強い（適度に）</td><td>IEEのSe示唆 — 「引っ張ってくれる」強さに安心する</td></tr>
+      <tr><td>誠実で嘘がない</td><td>デルタクワドラの核心価値 + Fi主機能の「本物」への渇望</td></tr>
+    </table></div>
+  </div>
+
+  <h2>本当に合うタイプ</h2>
+  <div class="card gold">
+    <h4>Si補完 + Te補完 + Fi理解</h4>
+    <div class="table-wrap"><table>
+      <tr><th>相性が良い特徴</th><th>根拠</th></tr>
+      <tr><td>安定感があり、生活面を支えてくれる</td><td>IEEのSi苦点を補完。「生活の基盤」を提供してくれる人</td></tr>
+      <tr><td>感情を言語化してくれる</td><td>土星蟹座R 3Hの「感情表現の壁」を代弁してくれる存在</td></tr>
+      <tr><td>行動力で引っ張ってくれる</td><td>Te劣等+タイプ9の優柔不断を補完する「決めて動く力」</td></tr>
+      <tr><td>内面を理解しようとしてくれる</td><td>Fi主機能にとって「表面ではなく中身を見てくれる」ことが最重要</td></tr>
+      <tr><td>自分のペースを尊重してくれる</td><td>タイプ9+IEEのSi苦点 — ペースを乱されることが最大のストレス</td></tr>
+      <tr><td>穏やかだが芯がある</td><td>タイプ9w1の「調和+正義感」と響き合える人</td></tr>
+    </table></div>
+  </div>
+
+  <h2>なぜギャップが生まれるのか</h2>
+  <div class="card">
+    <p>「惹かれるタイプ」と「合うタイプ」にギャップがある理由は、<strong>Te劣等の投影</strong>にある。</p>
+    <p style="margin-top:8px;">INFPはTe（効率・決断力・論理的統制力）が最も未発達な機能。人は自分に欠けている機能を、<strong>無意識に他者に投影して惹かれる</strong>。「あの人はすごい、決断力がある、リーダーシップがある」と感じるのは、自分のTe劣等が相手のTeを理想化しているから。</p>
+    <p style="margin-top:8px;">しかし実際にTe主導の人（ENTJ/ESTJなど）と付き合うと、<strong>Fiの価値観がTe的な「効率論」で踏み潰される</strong>リスクがある。「なんでそんな非効率なことしてるの？」「感情じゃなくて事実を見ろ」——これはFi主機能への直接攻撃になる。</p>
+    <div class="golden-box">
+      <div class="title">理想的なバランス</div>
+      <p style="font-size:12px;color:var(--text-muted);">Teが「得意」だが「主機能ではない」人がベスト。つまり、Teを使えるがそれに支配されていない人。行動力があるが、感情も理解できる。決断力があるが、相手のペースも尊重できる。</p>
+    </div>
+  </div>
+
+  <h2>理想のパートナー像</h2>
+
+  <div class="type-item">
+    <div class="type-num">TYPE 1</div>
+    <div class="type-title">穏やかだけど芯がある実行者</div>
+    <div class="type-reason">普段は落ち着いていて穏やかだが、いざという時に「こうしよう」と決断できる。Fiの価値観を理解し尊重しながら、Te的な実行力で現実を動かしてくれる人。</div>
+    <div class="type-evidence">
+      <div class="ev-label">対応するタイプ例</div>
+      <div class="ev-text">ISFJ / ISTJ / SLI（IEEの双対） — Si+Te系で生活の安定を提供しつつ、穏やかな関係を築ける</div>
+    </div>
+  </div>
+
+  <div class="type-item">
+    <div class="type-num">TYPE 2</div>
+    <div class="type-title">知的で深い対話ができる探求者</div>
+    <div class="type-reason">射手座8Hの「深層心理への関心」+Neの「可能性の探索」と共鳴できる知的好奇心を持つ。表面的な会話ではなく、哲学・心理・人生の意味について語り合える人。</div>
+    <div class="type-evidence">
+      <div class="ev-label">対応するタイプ例</div>
+      <div class="ev-text">INTJ / INFJ / INTP — Ni/Ti系の深い内面世界を持ち、対話の質が高い</div>
+    </div>
+  </div>
+
+  <div class="type-item">
+    <div class="type-num">TYPE 3</div>
+    <div class="type-title">包容力があり感情を安全に受け止めてくれる存在</div>
+    <div class="type-reason">Fi主機能の深い感情世界を「そのまま受け入れてくれる」包容力。土星蟹座R 3Hの「感情表現の壁」を、急かさずに待ってくれる忍耐力。「大丈夫、ゆっくりでいいよ」と言ってくれる人。</div>
+    <div class="type-evidence">
+      <div class="ev-label">対応するタイプ例</div>
+      <div class="ev-text">ISFP / ENFJ / タイプ2やタイプ9 — 受容力と感情的安全性を提供できるタイプ</div>
+    </div>
+  </div>
+
+  <h2>危険な相性パターン</h2>
+  <div class="card red">
+    <h4>要注意の組み合わせ</h4>
+    <ul>
+      <li><strong>Te主導 × Fi主導の衝突</strong> — ENTJ/ESTJとの関係は「惹かれるが傷つく」パターン。Te的な「効率論」がFiの価値観を否定する構造</li>
+      <li><strong>表面的な社交家</strong> — Fe主導で広く浅い関係を好むタイプは、Fiの「深さ」の欲求を満たせない。「みんなに同じ態度」がFiには「自分は特別ではない」と映る</li>
+      <li><strong>過度に依存的なタイプ</strong> — タイプ2スコア4+Agape的な愛で「与え続けて消耗する」構造。相手が依存的だと、境界線が崩壊する</li>
+      <li><strong>変化を嫌う完全固定型</strong> — Ne補助の「新しい可能性」欲求が封じられると、関係が窒息する。安定は大事だが、成長のない安定は退屈になる</li>
+    </ul>
+  </div>
+
+  <h2>総括</h2>
+  <blockquote>
+    無意識に惹かれるのは「Te的な決断力・ミステリアスな深さ・情熱」を持つ人。しかし本当に合うのは「Siの安定感・感情の理解力・穏やかな芯の強さ」を持つ人。この二つが一致する相手に出会えた時、金星蠍座7Hの「全か無か」の愛が、最も幸福な形で花開く。
+  </blockquote>
+  <div class="ending-box">
+    <div class="big">魂で響き合える相手を、焦らずに</div>
+    <p style="font-size:13px;color:var(--text-muted);">INFPの恋愛は「量」ではなく「質」。たった一人の本当に合う人に出会うまでに時間がかかっても、それはFi主機能が「本物」を見極めているプロセス。妥協しないことは、弱さではなく強さ。</p>
+  </div>
+</div>
+
+<!-- ===== TAB: 恋愛スタイル ===== -->
+<div class="tab-content" id="love-style">
+  <div class="about-box">
+    <div class="about-title">この診断でわかること</div>
+    <p>恋愛における行動パターン・コミュニケーション傾向・注意点を全診断データから統合分析します。恋愛の各段階で何が起きるかを具体的に読み解きます。</p>
+  </div>
+
+  <h2>恋愛の核心</h2>
+  <div class="card highlight">
+    <h4>INFP-A + 9w1 + IEE + 金星蠍座7H の恋愛</h4>
+    <p>恋愛に求めるのは<strong>「魂のつながり」</strong>。表面的なときめきや条件の一致ではなく、「この人は自分の本質を理解してくれる」「この人と一緒にいると、ありのままでいられる」という深い安心感。</p>
+    <p style="margin-top:8px;">金星蠍座7Hが示すように、一度好きになると<strong>非常に深く、一途に、全身全霊で愛する</strong>。「LobeType: 溺愛系 不思議生命体」が恋愛スタイルの全てを要約している。</p>
+    <div class="data-grid" style="margin-top:12px;">
+      <div class="data-item"><strong>恋愛の深さ</strong><br>金星蠍座7H</div>
+      <div class="data-item"><strong>恋愛の安定</strong><br>情動安定90%</div>
+      <div class="data-item"><strong>恋愛の理想</strong><br>Fi+Ne+9w1</div>
+      <div class="data-item"><strong>恋愛の情熱</strong><br>火星蠍座7H</div>
+    </div>
+  </div>
+
+  <h2>恋愛の段階</h2>
+  <div class="flow-step main"><strong>Stage 1：出会い</strong><br>Neが相手の「可能性」を感知する。外見よりも、その人の言葉遣い・価値観・雰囲気に反応する。「この人、何か違う」という直感が最初のスイッチ。牡牛座ASCが慎重さを保つため、すぐには動かない。</div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step alt"><strong>Stage 2：惹かれる</strong><br>Fiが相手の内面を「査定」し始める。深い会話、価値観の一致、誠実さの確認——これらが揃うと、内側で静かに火がつく。射手座8Hの「深層への探求」が相手への興味を加速させる。まだ表面には出さない。</div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step main"><strong>Stage 3：確信する</strong><br>「この人は本物だ」とFiが判定すると、金星蠍座7Hのスイッチが入る。ここから先は「全か無か」。中途半端な関係は受け入れられない。相手に深く入り込み、全てを知りたいと感じる。</div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step alt"><strong>Stage 4：深まる</strong><br>二人だけの世界を構築し始める。共有の思い出・内輪の言葉・特別な場所——Fiが「意味のラベル」を全てに貼っていく。溺愛系の本領が発揮され、相手を包み込むような愛情を注ぐ。</div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step main"><strong>Stage 5：安定</strong><br>タイプ9の調和志向+情動安定90%が関係を穏やかに維持する。大きなドラマは少ないが、深い安心感の中で関係が熟成していく。ただし、不満の蓄積には要注意。</div>
+
+  <h2>パートナーへのトリセツ</h2>
+  <div class="card">
+    <h4>Do / Don't</h4>
+    <div class="magic-row">
+      <div class="magic-good"><strong>Do: 深い対話の時間を作る</strong><br>表面的な会話ではなく、価値観や夢を語り合う時間が愛情の栄養になる</div>
+      <div class="magic-bad"><strong>Don't: 「それ意味ある？」と言う</strong><br>Fiにとって全てに意味がある。意味の否定は存在の否定</div>
+    </div>
+    <div class="magic-row">
+      <div class="magic-good"><strong>Do: 感情を待ってあげる</strong><br>言語化に時間がかかる。「ゆっくりでいいよ」が最高の言葉</div>
+      <div class="magic-bad"><strong>Don't: 「ちゃんと言って」と詰める</strong><br>急かされると本心と逆のことを言ってしまう</div>
+    </div>
+    <div class="magic-row">
+      <div class="magic-good"><strong>Do: 一人の時間を尊重する</strong><br>Fi回復のために一人の時間は必須。嫌いになったわけではない</div>
+      <div class="magic-bad"><strong>Don't: 「なんで一人でいたいの？」</strong><br>INFPの充電は一人の時間。奪うと消耗が加速する</div>
+    </div>
+    <div class="magic-row">
+      <div class="magic-good"><strong>Do: 小さな変化に気づく</strong><br>言葉にしない不満に気づいてくれると、信頼が深まる</div>
+      <div class="magic-bad"><strong>Don't: 「言わないとわからない」で終わる</strong><br>正論だが、それだけでは関係は改善しない</div>
+    </div>
+    <div class="magic-row">
+      <div class="magic-good"><strong>Do: 誠実さを示し続ける</strong><br>小さな嘘も積もると信頼崩壊のトリガーになる</div>
+      <div class="magic-bad"><strong>Don't: 二枚舌を使う</strong><br>金星蠍座+デルタクワドラ=不誠実は絶対に許されない</div>
+    </div>
+  </div>
+
+  <h2>喧嘩のパターンと対処法</h2>
+
+  <details class="accordion">
+    <summary>パターン1：沈黙の蓄積 → 突然の爆発</summary>
+    <div class="acc-body">
+      <h4>発生メカニズム</h4>
+      <p>タイプ9の「波風を立てたくない」+Fiの「内側で処理する」+情動安定90%の「表面に出さない」が合わさり、<strong>不満を一切言わずに溜め続ける</strong>。ある日、些細なことがきっかけで全ての蓄積が一気に噴出する。</p>
+      <h4>対処法</h4>
+      <ul>
+        <li><strong>予防</strong>: 週に一度「最近感じていること」を共有する時間を設ける</li>
+        <li><strong>発生時</strong>: 爆発した内容は「今日のこと」ではなく「数週間〜数ヶ月分の蓄積」。一つ一つ丁寧に聴く</li>
+        <li><strong>NG対応</strong>: 「急にどうしたの？」「そんな小さいこと」— 蓄積への無理解が最悪の反応</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>パターン2：価値観の衝突 → 静かな撤退</summary>
+    <div class="acc-body">
+      <h4>発生メカニズム</h4>
+      <p>Fiの核心的な価値観が否定された時、INFPは怒りではなく<strong>静かな撤退</strong>で反応する。表面上は穏やかだが、内側で「この人とは価値観が合わない」という判定が下されている。</p>
+      <h4>対処法</h4>
+      <ul>
+        <li><strong>予防</strong>: 相手の価値観を「理解しようとする姿勢」を見せる。同意する必要はない</li>
+        <li><strong>発生時</strong>: 「それが大事なんだね」と認めることが第一歩。否定も肯定もせず、まず受け止める</li>
+        <li><strong>NG対応</strong>: 「そんなの気にしすぎ」「みんなそう思ってるよ」— Fiの個人性の全否定</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>パターン3：理想と現実のギャップ → 幻滅</summary>
+    <div class="acc-body">
+      <h4>発生メカニズム</h4>
+      <p>Ne+Fiが相手を理想化し、現実の相手がその理想から外れた時に深い幻滅を感じる。「思っていた人と違った」という失望は、INFPにとって最も辛い恋愛体験の一つ。</p>
+      <h4>対処法</h4>
+      <ul>
+        <li><strong>予防</strong>: 相手を「理想の人」ではなく「一人の不完全な人間」として見る練習</li>
+        <li><strong>発生時</strong>: 「理想から外れた部分」が本当に許せないことなのか、それとも「理想が高すぎたのか」を冷静に区別する</li>
+        <li><strong>NG対応</strong>: 幻滅した瞬間に関係を終わらせる決断をすること — Ni影（暗い確信）に乗っ取られている可能性がある</li>
+      </ul>
+    </div>
+  </details>
+
+  <h2>長期関係を維持するコツ</h2>
+  <div class="card gold">
+    <ul>
+      <li><strong>「小さな不満を小さいうちに伝える」練習</strong> — INFP-Aにとって最も重要かつ最も難しいスキル。完璧に伝えなくていい。「なんかモヤモヤする」だけでも十分</li>
+      <li><strong>二人の「成長」を共有する</strong> — INFPは停滞を嫌う。パートナーと一緒に新しいことを学んだり、互いの成長を認め合えると関係が深まる</li>
+      <li><strong>一人の時間と二人の時間のバランス</strong> — どちらも必要。パートナーに「一人になりたい」と伝えることは愛情の否定ではないと理解してもらう</li>
+      <li><strong>言葉にならない愛情も認める</strong> — INFPの愛情表現は言葉だけではない。一緒にいる時の穏やかな空気、さりげないケア、相手の話を真剣に聴く姿勢——全てが愛情表現</li>
+      <li><strong>「完璧な関係」は存在しないと受け入れる</strong> — Fi+Neの理想主義が「もっといい関係があるはず」と囁く時、それはNe的な「可能性の罠」。今ある関係の「深さ」に目を向ける</li>
+    </ul>
+  </div>
+
+  <h2>総括</h2>
+  <div class="ending-box">
+    <div class="big">静かな炎で、深く、一途に</div>
+    <p style="font-size:13px;color:var(--text-muted);">INFPの恋愛は派手ではない。しかし、その静かな炎は一度灯ると容易には消えない。金星蠍座7Hが示すように、愛の深さは海のようで、一度潜ったら底が見えない。最も大切なのは「大丈夫」の仮面の下にある本当の気持ちを、信頼できるパートナーに見せる勇気。その勇気こそが、INFPの恋愛を「魂のつながり」に変える鍵。</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  統合分析日: 2026-04-22<br>
+  参照データ: BIG5-BASIC / エニアグラム / MBTI / ソシオニクス / LobeType / 西洋占星術<br>
+  出生データ: 2004/12/16 15:37 / 埼玉県坂戸市
+</div>
+
+<!-- JS -->
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
