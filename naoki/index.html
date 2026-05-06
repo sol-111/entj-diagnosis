@@ -397,7 +397,8 @@
 <!-- TAB NAV -->
 <nav class="tab-nav" id="tabNav">
   <!-- 自分を知る -->
-  <button class="tab-btn active" data-tab="overview" data-cat="self">総合</button>
+  <button class="tab-btn active" data-tab="manual" data-cat="self">取扱説明書</button>
+  <button class="tab-btn" data-tab="overview" data-cat="self">総合</button>
   <button class="tab-btn" data-tab="big5" data-cat="self">ビッグファイブ</button>
   <button class="tab-btn" data-tab="enneagram" data-cat="self">エニアグラム</button>
   <button class="tab-btn" data-tab="mbti" data-cat="self">MBTI</button>
@@ -406,11 +407,11 @@
   <button class="tab-btn" data-tab="horoscope" data-cat="self">ホロスコープ</button>
   <button class="tab-btn" data-tab="stress-map" data-cat="self">ストレス＆地雷</button>
   <button class="tab-btn" data-tab="shadow" data-cat="self">影の自己分析</button>
-  <button class="tab-btn" data-tab="entp-self" data-cat="self">ENTP自己分析</button>
+
   <!-- 恋愛を知る -->
   <button class="tab-btn" data-tab="love" data-cat="love" style="display:none;">恋愛タイプ</button>
   <button class="tab-btn" data-tab="my-type" data-cat="love" style="display:none;">好きなタイプ</button>
-  <button class="tab-btn" data-tab="love-style" data-cat="love" style="display:none;">恋愛スタイル</button>
+  <button class="tab-btn" data-tab="love-style" data-cat="love" style="display:none;">恋愛の進め方</button>
   <button class="tab-btn" data-tab="ranking" data-cat="love" style="display:none;">相性ランキング</button>
   <button class="tab-btn" data-tab="destiny-points" data-cat="love" style="display:none;">運命の感受点</button>
   <!-- 仕事を知る -->
@@ -422,12 +423,283 @@
   <button class="tab-btn" data-tab="shoki-bond" data-cat="work" style="display:none;">shoki仕事&友情</button>
 </nav>
 
+<!-- =============== TAB: 取扱説明書 =============== -->
+<div class="tab-content active" id="manual">
+<style>
+  #manual { padding: 0 0 80px; background: #0a0a10; }
+  .rpt { max-width: 640px; margin: 0 auto; }
+  .rpt-cover {
+    position: relative; padding: 80px 32px 64px; text-align: center; overflow: hidden;
+    background: linear-gradient(160deg, #12101f 0%, #0a0a10 40%, #10081a 100%);
+    border-bottom: 1px solid #1a1a2a;
+  }
+  .rpt-cover::before {
+    content: ''; position: absolute; top: -40%; left: -20%; width: 140%; height: 180%;
+    background: radial-gradient(ellipse at 30% 40%, rgba(66,184,245,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 60%, rgba(167,139,250,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .rpt-cover-label { font-size: 10px; letter-spacing: 4px; color: #5a5a6a; position: relative; }
+  .rpt-cover-type {
+    font-size: 56px; font-weight: 900; letter-spacing: -1px; margin: 16px 0 8px; position: relative;
+    background: linear-gradient(135deg, #7ec8f7, #a78bfa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .rpt-cover-title { font-size: 18px; font-weight: 300; color: #8a8a9a; position: relative; letter-spacing: 2px; }
+  .rpt-cover-line {
+    width: 48px; height: 2px; margin: 24px auto 0;
+    background: linear-gradient(90deg, #42b8f5, #a78bfa); position: relative;
+  }
+  .rpt-section { padding: 48px 32px; border-bottom: 1px solid #141420; }
+  .rpt-section:last-child { border-bottom: none; }
+  .rpt-sh { font-size: 10px; letter-spacing: 3px; color: #5a5a6a; text-transform: uppercase; margin-bottom: 6px; }
+  .rpt-h2 { font-size: 20px; font-weight: 800; color: #e8e6f0; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #1a1a2a; }
+  .rpt-quote { padding: 40px 32px; text-align: center; border-bottom: 1px solid #141420; }
+  .rpt-quote p { font-size: 20px; font-weight: 300; line-height: 2.2; color: #c8c6d0; font-style: italic; }
+  .rpt-quote strong { font-weight: 700; color: #e8e6f0; font-style: normal; }
+  .rpt-persona { display: flex; gap: 16px; flex-wrap: wrap; }
+  .rpt-persona-item { flex: 1; min-width: 140px; padding: 20px 16px; text-align: center; background: #12121c; border: 1px solid #1e1e2e; border-radius: 12px; }
+  .rpt-persona-value { font-size: 28px; font-weight: 900; color: #e8e6f0; line-height: 1; }
+  .rpt-persona-label { font-size: 10px; color: #6a6a7a; letter-spacing: 1px; margin-top: 8px; }
+  .rpt-persona-note { font-size: 11px; color: #8a8a9a; margin-top: 4px; }
+  .rpt-gap-row { display: flex; align-items: center; padding: 16px 0; border-bottom: 1px solid #141420; }
+  .rpt-gap-row:last-child { border-bottom: none; }
+  .rpt-gap-label { flex: 1; font-size: 13px; color: #6a6a7a; }
+  .rpt-gap-divider { width: 40px; text-align: center; font-size: 18px; color: #3a3a5a; flex-shrink: 0; }
+  .rpt-gap-truth { flex: 1.3; font-size: 14px; font-weight: 600; color: #e8e6f0; }
+  .rpt-rule { padding: 20px 0; border-bottom: 1px solid #141420; }
+  .rpt-rule:last-child { border-bottom: none; }
+  .rpt-rule-num { font-size: 32px; font-weight: 900; color: #1e1e2e; float: left; margin-right: 16px; line-height: 1; }
+  .rpt-rule-title { font-size: 15px; font-weight: 700; color: #e8e6f0; margin-bottom: 4px; }
+  .rpt-rule-body { font-size: 13px; color: #8a8a9a; line-height: 1.8; }
+  .rpt-rule::after { content: ''; display: block; clear: both; }
+  .rpt-list-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid #141420; }
+  .rpt-list-item:last-child { border-bottom: none; }
+  .rpt-list-marker { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; margin-top: 2px; }
+  .rpt-list-marker.ng { background: rgba(248,113,113,0.12); color: #f87171; }
+  .rpt-list-marker.ok { background: rgba(74,222,128,0.12); color: #4ade80; }
+  .rpt-list-title { font-size: 14px; font-weight: 700; color: #e8e6f0; }
+  .rpt-list-desc { font-size: 12px; color: #6a6a7a; margin-top: 2px; }
+  .rpt-sos-row { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid #141420; align-items: flex-start; }
+  .rpt-sos-row:last-child { border-bottom: none; }
+  .rpt-sos-sign { font-size: 14px; font-weight: 700; color: #fb923c; flex: 1; }
+  .rpt-sos-meaning { font-size: 12px; color: #6a6a7a; flex: 1; }
+  .rpt-sos-action { font-size: 12px; color: #4ade80; flex: 1; }
+  .rpt-closing { padding: 64px 32px; text-align: center; }
+  .rpt-closing p { font-size: 15px; line-height: 2.4; color: #8a8a9a; }
+  .rpt-closing-big { font-size: 20px; font-weight: 800; margin-top: 24px; line-height: 2; background: linear-gradient(135deg, #7ec8f7, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .rpt-closing-line { width: 48px; height: 2px; margin: 32px auto 0; background: linear-gradient(90deg, #42b8f5, #a78bfa); }
+  .rpt-credit { text-align: center; padding: 24px 32px 0; color: #3a3a4a; font-size: 10px; letter-spacing: 1px; }
+</style>
+
+<div class="rpt">
+  <div class="rpt-cover">
+    <div class="rpt-cover-label">PERSONALITY REPORT</div>
+    <div class="rpt-cover-type">ENTP-A</div>
+    <div class="rpt-cover-title">取扱説明書</div>
+    <div class="rpt-cover-line"></div>
+  </div>
+
+  <div class="rpt-quote">
+    <p>全ステータスがカンスト寸前の規格外。<br>唯一の弱点は、強すぎるがゆえに<br><strong>自分の弱さに気づけないこと。</strong></p>
+  </div>
+
+  <div class="rpt-section">
+    <div class="rpt-sh">Section 01</div>
+    <div class="rpt-h2">基本データ</div>
+    <div class="rpt-persona">
+      <div class="rpt-persona-item">
+        <div class="rpt-persona-value">ENTP-A</div>
+        <div class="rpt-persona-label">MBTI</div>
+        <div class="rpt-persona-note">討論者・主張型</div>
+      </div>
+      <div class="rpt-persona-item">
+        <div class="rpt-persona-value">8w7</div>
+        <div class="rpt-persona-label">ENNEAGRAM</div>
+        <div class="rpt-persona-note">挑戦者 × 冒険心</div>
+      </div>
+      <div class="rpt-persona-item">
+        <div class="rpt-persona-value">97%</div>
+        <div class="rpt-persona-label">MENTAL STABILITY</div>
+        <div class="rpt-persona-note">上位3%の鉄壁メンタル</div>
+      </div>
+      <div class="rpt-persona-item">
+        <div class="rpt-persona-value">♒</div>
+        <div class="rpt-persona-label">SUN SIGN</div>
+        <div class="rpt-persona-note">水瓶座</div>
+      </div>
+      <div class="rpt-persona-item">
+        <div class="rpt-persona-value">♐ ASC</div>
+        <div class="rpt-persona-label">FIRST IMPRESSION</div>
+        <div class="rpt-persona-note">冒険家・楽しそうな人</div>
+      </div>
+      <div class="rpt-persona-item">
+        <div class="rpt-persona-value">♊ 月 6H</div>
+        <div class="rpt-persona-label">EMOTIONAL CORE</div>
+        <div class="rpt-persona-note">感情を知的に処理する</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rpt-section">
+    <div class="rpt-sh">Section 02</div>
+    <div class="rpt-h2">周りからの印象 vs 本当の自分</div>
+    <div class="rpt-gap-row">
+      <div class="rpt-gap-label">何でもできるオールラウンダー</div>
+      <div class="rpt-gap-divider">―</div>
+      <div class="rpt-gap-truth">「弱さを見せても大丈夫な相手」を探している</div>
+    </div>
+    <div class="rpt-gap-row">
+      <div class="rpt-gap-label">いつも楽しそう</div>
+      <div class="rpt-gap-divider">―</div>
+      <div class="rpt-gap-truth">情動安定97%が感情を隠蔽している</div>
+    </div>
+    <div class="rpt-gap-row">
+      <div class="rpt-gap-label">怖いものなし</div>
+      <div class="rpt-gap-divider">―</div>
+      <div class="rpt-gap-truth">タイプ8のコア恐怖は「支配されること」</div>
+    </div>
+    <div class="rpt-gap-row">
+      <div class="rpt-gap-label">社交的で友達が多い</div>
+      <div class="rpt-gap-divider">―</div>
+      <div class="rpt-gap-truth">本当に信頼する相手は極めて少ない</div>
+    </div>
+    <div class="rpt-gap-row">
+      <div class="rpt-gap-label">議論好きで攻撃的</div>
+      <div class="rpt-gap-divider">―</div>
+      <div class="rpt-gap-truth">Ne+Tiの知的遊び。本人は楽しんでいる</div>
+    </div>
+  </div>
+
+  <div class="rpt-section">
+    <div class="rpt-sh">Section 03</div>
+    <div class="rpt-h2">この人の取り扱い方</div>
+    <div class="rpt-rule">
+      <div class="rpt-rule-num">01</div>
+      <div class="rpt-rule-title">対等な立場で接する</div>
+      <div class="rpt-rule-body">タイプ8は「見下される」ことを最も嫌う。上から目線・マウントは一発で信頼を失う。「俺の仲間だ」と認めた相手には底知れない忠誠を注ぐ。対等であることが全ての前提。</div>
+    </div>
+    <div class="rpt-rule">
+      <div class="rpt-rule-num">02</div>
+      <div class="rpt-rule-title">知的な刺激を与え続ける</div>
+      <div class="rpt-rule-body">Ne主機能 × 創造性94%。退屈が最大の敵。「面白い」が最高の褒め言葉。新しいアイデア・挑戦・発見がないと、この人のエンジンは止まる。</div>
+    </div>
+    <div class="rpt-rule">
+      <div class="rpt-rule-num">03</div>
+      <div class="rpt-rule-title">自由にさせる</div>
+      <div class="rpt-rule-body">水瓶座ステリウム × タイプ8。束縛・管理・コントロールは生存本能レベルで拒絶する。「好きにやっていいよ」が最高の信頼表現。</div>
+    </div>
+    <div class="rpt-rule">
+      <div class="rpt-rule-num">04</div>
+      <div class="rpt-rule-title">弱さを見せても安全だと示す</div>
+      <div class="rpt-rule-body">タイプ8の最深部にある恐怖は「弱さを見せたら支配される」。鎧を脱がせるには、まず自分が先に弱さを見せること。攻撃しないと信じられて初めて、この人は本当の自分を出す。</div>
+    </div>
+    <div class="rpt-rule">
+      <div class="rpt-rule-num">05</div>
+      <div class="rpt-rule-title">裏表なく正直でいる</div>
+      <div class="rpt-rule-body">協調性78% × タイプ8の忠誠心。嘘や建前を最も嫌う。「本音で話してくれる人」にだけ心を開く。遠回しな表現より直球が響く。</div>
+    </div>
+  </div>
+
+  <div class="rpt-section">
+    <div class="rpt-sh">Section 04</div>
+    <div class="rpt-h2">絶対にやってはいけないこと</div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ng">NG</div>
+      <div><div class="rpt-list-title">コントロールしようとする</div><div class="rpt-list-desc">タイプ8の根源的恐怖。支配された瞬間に関係が終わる</div></div>
+    </div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ng">NG</div>
+      <div><div class="rpt-list-title">裏で嘘をつく</div><div class="rpt-list-desc">タイプ8の忠誠心は深いが、裏切りへの報復も激烈</div></div>
+    </div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ng">NG</div>
+      <div><div class="rpt-list-title">能力を過小評価する</div><div class="rpt-list-desc">全スペックがオールハイ。「君にはまだ早い」は最大の侮辱</div></div>
+    </div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ng">NG</div>
+      <div><div class="rpt-list-title">退屈な環境に閉じ込める</div><div class="rpt-list-desc">Ne × タイプ7w。知的刺激の枯渇はゆっくりと魂を殺す</div></div>
+    </div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ng">NG</div>
+      <div><div class="rpt-list-title">弱さを攻撃する</div><div class="rpt-list-desc">タイプ8が稀に見せた脆さを笑ったら、二度と鎧は脱がない</div></div>
+    </div>
+  </div>
+
+  <div class="rpt-section">
+    <div class="rpt-sh">Section 05</div>
+    <div class="rpt-h2">喜ぶこと</div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ok">✓</div>
+      <div><div class="rpt-list-title">「面白い」を一緒に追いかける</div><div class="rpt-list-desc">Ne × タイプ7w。新しい挑戦を共有してくれる相手が最高の存在</div></div>
+    </div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ok">✓</div>
+      <div><div class="rpt-list-title">対等な議論をする</div><div class="rpt-list-desc">Ti補助 × 外向性93%。知的に拮抗する対話が最大の栄養</div></div>
+    </div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ok">✓</div>
+      <div><div class="rpt-list-title">信頼して任せてくれる</div><div class="rpt-list-desc">タイプ8 × Se主導。「お前に任せた」が最高の愛の形</div></div>
+    </div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ok">✓</div>
+      <div><div class="rpt-list-title">裏表なく本音で話す</div><div class="rpt-list-desc">建前が通じない人。正直さだけが信頼を作る</div></div>
+    </div>
+    <div class="rpt-list-item">
+      <div class="rpt-list-marker ok">✓</div>
+      <div><div class="rpt-list-title">冒険に誘ってくれる</div><div class="rpt-list-desc">射手座ASC × 水瓶座。新しい場所・新しい体験がエネルギー源</div></div>
+    </div>
+  </div>
+
+  <div class="rpt-section">
+    <div class="rpt-sh">Section 06</div>
+    <div class="rpt-h2">限界のサイン</div>
+    <div style="display:flex;gap:16px;margin-bottom:12px;font-size:11px;color:#5a5a6a;border-bottom:1px solid #1a1a2a;padding-bottom:8px;">
+      <div style="flex:1;">サイン</div><div style="flex:1;">意味</div><div style="flex:1;">対処法</div>
+    </div>
+    <div class="rpt-sos-row">
+      <div class="rpt-sos-sign">人を避け始める</div>
+      <div class="rpt-sos-meaning">外向性93%の人が引きこもり＝タイプ5化</div>
+      <div class="rpt-sos-action">無理に引き出さず「いつでもいるよ」と伝える</div>
+    </div>
+    <div class="rpt-sos-row">
+      <div class="rpt-sos-sign">アイデアが出なくなる</div>
+      <div class="rpt-sos-meaning">Neが機能停止。知的エンジンが止まっている</div>
+      <div class="rpt-sos-action">新しい刺激を外から入れる</div>
+    </div>
+    <div class="rpt-sos-row">
+      <div class="rpt-sos-sign">怒りの閾値が下がる</div>
+      <div class="rpt-sos-meaning">タイプ8のダムが満杯。些細なことで爆発</div>
+      <div class="rpt-sos-action">原因を聞く。溜まっているものを吐き出させる</div>
+    </div>
+    <div class="rpt-sos-row">
+      <div class="rpt-sos-sign">「面白い」を言わなくなる</div>
+      <div class="rpt-sos-meaning">ENTPの口癖が消えた＝全機能停止</div>
+      <div class="rpt-sos-action">赤信号。信頼できる相手との対話が急務</div>
+    </div>
+  </div>
+
+  <div class="rpt-closing">
+    <p>表面はカリスマ的な冒険家。<br>中身は「自分のルールで世界を動かしたい」挑戦者。<br>核心には「鎧を脱いでも安全な場所」を求める、意外な脆さ。</p>
+    <div class="rpt-closing-big">
+      この人の取り扱いで最も大切なことは、<br>たった一つ。<br><br>
+      「強くなくてもいい」を、<br>安全に感じさせること。
+    </div>
+    <div class="rpt-closing-line"></div>
+  </div>
+
+  <div class="rpt-credit">
+    <p>PERSONALITY REPORT — MBTI × Enneagram × Big Five × Socionics × Horoscope</p>
+  </div>
+</div>
+</div>
+
 <!-- =============== TAB: 総合 =============== -->
-<div class="tab-content active" id="overview">
+<div class="tab-content" id="overview">
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>MBTI・エニアグラム・ビッグファイブ・ソシオニクス・ホロスコープなど複数の性格診断を横断的に統合し、性格構造・強みと課題を多角的に分析したレポートです。</p>
+    <p>MBTI・エニアグラム・ビッグファイブ・ソシオニクス・ホロスコープなど複数の性格診断を横断的に統合し、性格構造・強みと課題を多角的に分析します。</p>
   </div>
 
   <h2>データ一覧</h2>
@@ -467,6 +739,16 @@
 
   <h2>プロファイル</h2>
   <blockquote>規格外のオールラウンダー。圧倒的な安定感と創造性を武器に、カリスマ的魅力で周囲を巻き込みながら現実を動かす。</blockquote>
+
+  <h2>あなたの物語</h2>
+  <div class="card" style="line-height:2;font-size:14px;">
+    <p>初対面の人はまず、この人の<strong>エネルギー</strong>に圧倒される。射手座ASC29°が作る第一印象は「なんか楽しそう」「スケールが大きい」。外向性93%のカリスマが部屋の空気を一瞬で変える。</p>
+    <p>少し話すと気づく。この人は<strong>議論を楽しんでいる</strong>。Ne主機能のENTPは、全てのインプットを「面白い可能性」に変換する。矛盾を見つければ突っ込み、常識を疑い、誰も思いつかない角度から問題を切る。それは攻撃ではなく、知的な遊びだ。</p>
+    <p>さらに深く知ると見えてくるのは、<strong>タイプ8のパワー</strong>。「自分のルールで動く」「誰にも支配されない」——この信念は揺るがない。自分の人間を守るために全力で戦い、裏切りには容赦しない。協調性78%の温かさがパワーを和らげているが、本質は王者の気質だ。</p>
+    <p>でも、本当に近い人だけが知っている顔がある。<strong>タイプ8が最も恐れているのは「弱さを見せること」</strong>。全ステータスがオールハイのこの人が、唯一できないのは「助けて」と言うこと。情動安定97%が全てのSOSを隠蔽し、鎧の下で静かに消耗する。</p>
+    <p>そしてこの人の月は双子座6H。<strong>感情を「知的に処理する」構造</strong>。悲しみも怒りも、まず「なぜそう感じるのか」を分析する。それは強さであり、同時に「感じることを許せない」枷でもある。</p>
+    <p style="margin-top:12px;color:var(--accent);font-weight:700;">「最強に見える人」が「強くなくてもいい」と言ってもらえた瞬間——それがこの人の人生で最も大切な転換点になる。</p>
+  </div>
 
   <h2>性格の核心</h2>
 
@@ -541,7 +823,7 @@
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>MBTI・ソシオニクス・エニアグラム・ビッグファイブ・恋愛タイプ・ホロスコープの全データを統合し、「足りないものを自然に補える相手」を逆算した忖度なしランキング。</p>
+    <p>MBTI・ソシオニクス・エニアグラム・ビッグファイブ・恋愛タイプ・ホロスコープの全データを統合し、「足りないものを自然に補える相手」を逆算した忖度なしランキングを作成します。</p>
   </div>
 
   <h2>足りないものから逆算する</h2>
@@ -673,7 +955,7 @@
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>性格を「外向性・協調性・勤勉性・情動安定性・創造性」の5つの軸でスコア化する、心理学で最も科学的根拠が強い性格モデルです。性格傾向が数値で客観的にわかります。</p>
+    <p>心理学で最も科学的根拠が強い性格モデルで、性格を「外向性・協調性・勤勉性・情動安定性・創造性」の5軸でスコア化し、性格傾向を数値で客観的に分析します。</p>
   </div>
 
   <h2>ビッグファイブ</h2>
@@ -772,7 +1054,7 @@
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>人の根本的な動機・恐れ・欲求を9つのタイプで分類する性格類型論です。「なぜそう行動するのか」という内面の動機がわかり、ストレス時や成長時の変化パターンが見えてきます。</p>
+    <p>人の根本的な動機・恐れ・欲求を9つのタイプで分類し、「なぜそう行動するのか」という内面の動機やストレス時・成長時の変化パターンを分析します。</p>
   </div>
 
   <h2>エニアグラムスコア</h2>
@@ -940,7 +1222,7 @@
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>外向/内向・感覚/直感・思考/感情・判断/知覚の4軸で16タイプに分類する世界で最も普及した性格診断です。思考スタイルやコミュニケーションの傾向がわかります。</p>
+    <p>外向/内向・感覚/直感・思考/感情・判断/知覚の4軸で16タイプに分類し、思考スタイルやコミュニケーションの傾向を分析します。</p>
   </div>
 
   <h2>ENTP-A（討論者）</h2>
@@ -1082,6 +1364,158 @@
 
   <h2>ENTP-Aの一言</h2>
   <blockquote>「100の可能性を見出し、3秒で最適解を選び、即座に実行する——頭は未来を見ながら、足は今を動かす。」</blockquote>
+
+  <h2>ENTP-A 深掘り分析</h2>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">認知機能パターンと内面の葛藤を深掘りし、「なぜ自分はこうなのか」を構造的に解剖する。</p>
+
+  <details class="accordion">
+    <summary>ENTP-Aの自画像</summary>
+    <div class="acc-body">
+  <div class="card highlight">
+    <p>ENTPは16タイプの中で最も<strong>「知的な挑戦者」</strong>と呼ばれるタイプ。頭の中では常に新しい可能性・アイデア・戦略が生成され続け、現実世界はその知的エネルギーを放出するフィールドとして認識される。</p>
+    <p style="margin-top:8px;">しかしENTP-Aは通常のENTP(-T)と大きく異なる。<strong>大胆さと鉄壁の安定感が共存する</strong>という、破壊力と不動の心を併せ持つ。情動安定性97%が「何があっても揺るがない」という構造的な強さを形成し、SLE-D × タイプ8w7が「即断即決で現実を動かす」行動力を生んでいる。</p>
+    <div class="data-grid" style="margin-top:12px;">
+      <div class="data-item"><strong>MBTI</strong><br>ENTP-A</div>
+      <div class="data-item"><strong>ソシオニクス</strong><br>SLE-D</div>
+      <div class="data-item"><strong>エニアグラム</strong><br>8w7</div>
+      <div class="data-item"><strong>情動安定性</strong><br>97%</div>
+    </div>
+  </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>Ne主導が作る行動原理</summary>
+    <div class="acc-body">
+  <div class="card">
+    <p>Ne（外向直観）が主機能ということは、<strong>全ての状況が「まだ見ぬ可能性」というフィルターを通して処理される</strong>ということ。現状維持よりも、「ここからどう変えられるか」が常に最優先される。</p>
+    <h4 style="margin-top:12px;">Ne × SLE × タイプ8が作る矛盾構造</h4>
+    <ul>
+      <li>MBTI上のNe（可能性の爆発的生成）とソシオニクスのNe苦点（選択肢が広がると消耗）が同時に存在</li>
+      <li>アイデアを生むのは得意だが、選択肢に留まるとストレスになる → Neで生む、Tiで絞る、Seで動く、の3段階をミリ秒で回す</li>
+      <li>関心領域（What）は多様・流動的だが、関わり方（How）は独立・革新・挑戦で固定</li>
+      <li>「やっていることは変わるが、やり方は変わらない」——水瓶座不動宮 × タイプ8の不動の軸</li>
+      <li>勤勉性85%が「飽きっぽく見えて実は続く」ギャップを生む。信念レベルの軸はむしろ誰より固い</li>
+    </ul>
+  </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>ENTPの理想と現実のギャップ</summary>
+    <div class="acc-body">
+  <div class="card">
+    <p>Ne+Tiの組み合わせは「より良いシステム・より面白い未来」を鮮明に構想する力を生む。しかしその構想は<strong>現実の制約を無視した理想像</strong>であることが多い。</p>
+    <div class="table-wrap"><table>
+      <tr><th>理想（Ne+Ti）</th><th>現実</th><th>ギャップの影響</th></tr>
+      <tr><td>全ての問題に革新的な解決策がある</td><td>世界は非合理と妥協で動いている</td><td>「なぜ誰もこうしないのか」という苛立ち</td></tr>
+      <tr><td>議論は知的な共同作業</td><td>多くの人は議論を攻撃と感じる</td><td>「論破する気はない」のに相手が傷つく</td></tr>
+      <tr><td>自分のルールで自由に動ける世界</td><td>組織・権威・ルールが存在する</td><td>「従え」に対する構造的な反発</td></tr>
+      <tr><td>常に新しい挑戦がある人生</td><td>安定・ルーティンも必要</td><td>「退屈 = 精神的な死」という焦燥感</td></tr>
+    </table></div>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">ただし情動安定性97%がこのギャップを「耐えられるレベル」に保っている。ENTP-Tなら皮肉と反発に消耗するところを、ENTP-Aは「まあ、自分でやればいい」と切り替えられる強さがある。</p>
+  </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>「A」が与えるENTPへの影響</summary>
+    <div class="acc-body">
+  <div class="card gold">
+    <h4>ENTP-Aの情動安定97%は「三重の装甲」</h4>
+    <p>タイプ8の鎧 + 情動安定97%の麻酔 + ASC射手座の楽観的仮面。この三重構造が<strong>「揺れない」のではなく「揺れを感知しない」</strong>状態を生んでいる。</p>
+    <div class="table-wrap" style="margin-top:12px;"><table>
+      <tr><th>場面</th><th>ENTP-T</th><th>ENTP-A（自分）</th></tr>
+      <tr><td>批判を受けた時</td><td>皮肉で反撃し、内心で引きずる</td><td>「ふーん」で流す。傷ついていても気づかない</td></tr>
+      <tr><td>失敗した時</td><td>自尊心が揺れ、焦る</td><td>「次はこうする」と即切り替え。反省より行動</td></tr>
+      <tr><td>対立場面</td><td>攻撃的になりがち</td><td>冷静に論理で切る。感情は出ない</td></tr>
+      <tr><td>不確実な状況</td><td>焦りが言動に出る</td><td>「面白くなってきた」と楽しめる</td></tr>
+    </table></div>
+    <div class="danger-box" style="margin-top:12px;">
+      <div class="title">-Aの落とし穴</div>
+      <p style="font-size:12px;color:var(--text-muted);">安定感が高すぎるため、<strong>「本当に傷ついている自分」に気づくのが構造的に不可能に近い</strong>。鎧を脱ごうとする前に、鎧を着ていることすら自覚できない。周りが「大丈夫？」と聞いても、本心で「全然」と答えられてしまう。ASC射手座が「大丈夫そうな笑顔」を自動生成するため、周りも異変に気づけない。</p>
+    </div>
+  </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>ENTPが陥りやすい5つのパターン</summary>
+    <div class="acc-body">
+
+  <details class="accordion">
+    <summary>1. 退屈恐怖と刺激中毒</summary>
+    <div class="acc-body">
+      <p>Ne主機能 + タイプ7ウィング + 創造性94%の三重圧が<strong>退屈 = 精神的な死</strong>という感覚を生む。停滞は存在価値の喪失に感じる。</p>
+      <p style="margin-top:8px;">健全な安定（良い習慣・長期の関係）まで「停滞している」と感じ、壊す方向に動いてしまう。「飽きた」の多くは対象の問題ではなくNeが刺激に飢えているだけ。恋愛では関係が安定すると「退屈」のラベルを貼りがち。長期雇用・定常業務は構造的に耐えられない。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 外部から刺激を調達し続けるのではなく、内部から新しい視点を生み出す訓練。Neを「外に広げる」から「同じ対象を深く掘る」に切り替える練習が鍵。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>2. 強さの鎧と感情の封印</summary>
+    <div class="acc-body">
+      <p>タイプ8の基本的恐怖は「弱さを見せること」。弱さを見せた瞬間、アイデンティティ（挑戦者・守る者）が崩れる。SLEのFiは役割機能（3番）= 苦手で消耗する。「傷つく」「悲しい」「寂しい」は<strong>存在してはならない感情</strong>。</p>
+      <p style="margin-top:8px;">97%の情動安定性は「揺れない」ではなく「揺れを感知しない」に近い。月双子座が感情を知的処理し、涙より先に言葉が来る。分析できた時点で感情は「解決済み」とラベルされるが、本当の消化に至らない。恋愛では「好き」の感覚すら深く感じ切れない。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 鎧を「自力で脱ぐ」のは構造上ほぼ不可能。信頼できる相手の前で「外側から開けてもらう」形が必要。Fiを育てるには「感じる前に考える」を意識的に遅らせること。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>3. 身体の限界への無自覚</summary>
+    <div class="acc-body">
+      <p>Siが構造上ダブルで弱い。MBTI上のSi劣等（4番・最弱）+ ソシオニクスのSi背景機能（8番・無意識下）。身体感覚・疲労・快適さのセンサーが<strong>二重に封じられている</strong>。</p>
+      <p style="margin-top:8px;">火星牡羊座4H（ドミサイル）が行動力を天文学的最大値まで供給。倒れない → まだいける → さらに動く、の無限ループ。97%の情動安定がSi信号を完全にブロックするため、限界は「気づく」ものではなく「突然来る」もの。タイプ5化（急に引きこもる・動けなくなる）が起きて初めて「やばかったのか」と気づく。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 「気づけない」のではなく「気づく回路がそもそも細い」。定期的な強制リセット（睡眠・運動・医療チェック）をルーティンに組み込むしか対策がない。意志の問題ではなく構造の問題。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>4. 論破と正論威圧</summary>
+    <div class="acc-body">
+      <p>Ne（主機能）が相手の発言の矛盾を即座に察知し、Ti（補助）が内的論理で検証。検出と同時に口が動いてしまう。タイプ8は直球・本音 →「違うと思ったら言う」がデフォルト。協調性78%があっても、<strong>腹の底のタイプ8が「言え」と命令する</strong>。</p>
+      <p style="margin-top:8px;">本人は「一緒に正しい答えに辿り着きたい」だけで、議論を知的な共同作業と捉えている。しかし受け手は「論破された」「否定された」と感じる。タイプ8の威圧感 + Ti的な鋭さが、優しいトーンでも刃物に感じられるため。LobeType「デビル天使」そのもの——天使側（協調性78%）と、デビル側（Ti+タイプ8）が同時発火し、相手は混乱する。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 「同意しないけど、その視点は面白いね」の一言が切り替えスイッチ。Ti+タイプ8を「論破モード」から「共有モード」に。Fe第三機能を意図的に前に出す練習。</p>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>5. コントロール拒否と支配欲の逆説</summary>
+    <div class="acc-body">
+      <p>タイプ8の基本的欲求は「自分の運命を自分で握る」。コントロール・指示・命令はこの核心を直撃する。タイプ6最低（2）+ 水瓶座 + 天王星支配が、権威への服従を本能的・天体レベルで不可能にしている。</p>
+      <p style="margin-top:8px;">小さな指示にも過敏に反発するのは、「指示の内容」ではなく「支配構造の匂い」に反応しているから。相手に悪意がなくても、命令形式というだけで防御が発動。自分はリードしたい（タイプ8）のに自分が指示されるのは耐えられない、という逆説が生まれる。結果、自分がトップでない環境で構造的に消耗する。</p>
+      <p style="margin-top:8px;"><strong>対策</strong>: 「指示」ではなく「相談」「提案」の形なら通る。「こうしてくれる？」ではなく「これどう思う？」がタイプ8の防御を解くスイッチ。これは相手に求めるだけでなく、自分が指示を出す側でも意識すべきこと。</p>
+    </div>
+  </details>
+
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>ENTPの成長戦略</summary>
+    <div class="acc-body">
+  <div class="card green">
+    <h4>Ne+Tiの強みを活かしながら、Si+Fiを補強する</h4>
+    <ul>
+      <li><strong>Si劣等の補強</strong>: 身体の声を聞く練習。定期的な強制リセットをルーティンに組み込む。「疲れた」を認めることは弱さではなく知性</li>
+      <li><strong>Fiの育成</strong>: 「本当はどう感じているか」を自分に問いかける習慣。感情を論理で処理する前に、まず「感じる」ことを許す</li>
+      <li><strong>Neの建設的な活用</strong>: 可能性を広げるだけでなく、「深く掘る」方向にNeを使う練習。退屈恐怖を「新しい角度の発見」で昇華する</li>
+      <li><strong>Fe第三機能の意識的発動</strong>: 論破モードを検知したら「その視点は面白い」で共有モードに切り替える</li>
+      <li><strong>弱さの統合</strong>: タイプ8 → タイプ2への成長は「強さを手放す」ことではなく「強さの中に弱さを含める」こと。脆弱性は最大の強さになりうる</li>
+    </ul>
+  </div>
+    </div>
+  </details>
+
+  <details class="accordion">
+    <summary>総括</summary>
+    <div class="acc-body">
+  <blockquote>
+    ENTP-Aは「鉄壁の安定を纏った知的挑戦者」。その鉄壁のおかげで世界と戦えるが、鉄壁の内側で蓄積する疲労と感情に気づくことを忘れてはいけない。Neの爆発的な可能性とTiの鋭い論理は最大の武器。それを「壊す力」だけでなく「つくる力」として使い続けることが、ENTPの成長の核心にある。
+  </blockquote>
+    </div>
+  </details>
+
 </div>
 
 <!-- =============== TAB: ソシオニクス =============== -->
@@ -1089,7 +1523,7 @@
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>ユングの心理機能を8つに拡張し、16タイプ間の「関係性」まで理論化した旧ソ連発の性格類型論です。タイプ間の相性が数学的に定義されている点がMBTIとの最大の違いです。</p>
+    <p>ユングの心理機能を8つに拡張し、16タイプ間の「関係性」まで理論化した旧ソ連発の性格類型論で、タイプ間の相性を数学的に分析します。</p>
   </div>
 
   <h2>ソシオニクスとは</h2>
@@ -1199,7 +1633,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>恋愛心理学の「愛の6類型（リーの愛のスタイル）」をベースに、情熱型・友愛型・無償型などの恋愛パターンを分析します。どんな愛し方をし、何を求めるかが具体的にわかります。</p>
+    <p>恋愛心理学の「愛の6類型（リーの愛のスタイル）」をベースに、情熱型・友愛型・無償型などの恋愛パターンや愛し方・求めるものを具体的に分析します。</p>
   </div>
 
   <h2>恋愛スタイル</h2>
@@ -1331,7 +1765,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>12星座を火・地・風・水の4元素と、活動・固定・柔軟の3区分で分類し、性格の根底にあるエネルギーの質を読み解きます。同じ元素同士の安定感や、異なる元素間の刺激・摩擦のパターンがわかります。</p>
+    <p>12星座を火・地・風・水の4元素と活動・固定・柔軟の3区分で分類し、性格の根底にあるエネルギーの質や元素間の相性パターンを分析します。</p>
   </div>
 
   <div class="table-wrap"><table>
@@ -1430,7 +1864,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>出生時の天体配置から、太陽・月・ASC（アセンダント）・MC（天頂）などの位置を読み解き、性格の深層構造と人生のテーマを分析します。太陽星座だけでは見えない深層的な性格・対人傾向が多層的にわかります。</p>
+    <p>出生時の天体配置から太陽・月・ASC（アセンダント）・MC（天頂）などの位置を読み解き、太陽星座だけでは見えない深層的な性格・対人傾向を多角的に分析します。</p>
   </div>
 
   <h2>出生データ</h2>
@@ -1593,7 +2027,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>「何にストレスを感じるか」「何をされると壊れるか」「ストレス時にどう変化するか」を全診断データを統合して分析します。ストレスの構造的原因と回復方法がわかります。</p>
+    <p>「何にストレスを感じるか」「何をされると壊れるか」「ストレス時にどう変化するか」を全診断データから統合し、ストレスの構造的原因と回復方法を分析します。</p>
   </div>
 
   <h2>ストレス反応の全体像</h2>
@@ -1699,7 +2133,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>普段は意識しない「影（シャドウ）」の側面を分析し、ストレス下や無意識に現れる別の自分を読み解きます。ユングの8機能モデルに基づく分析です。</p>
+    <p>ユングの8機能モデルに基づき、普段は意識しない「影（シャドウ）」の側面やストレス下・無意識に現れる別の自分を分析します。</p>
   </div>
 
   <h2>シャドウとは</h2>
@@ -1828,140 +2262,12 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
   </blockquote>
 </div>
 
-<!-- =============== TAB: ENTP自己分析 =============== -->
-<div class="tab-content" id="entp-self">
-
-  <div class="about-box">
-    <div class="about-title">この診断でわかること</div>
-    <p>固有の認知機能パターンと内面の葛藤を深掘りし、自己理解を深めるための分析です。全診断データを統合し、「なぜ自分はこうなのか」を構造的に解剖します。</p>
-  </div>
-
-
-  <h2>ENTP-Aの自画像</h2>
-  <div class="card highlight">
-    <p>ENTPは16タイプの中で最も<strong>「知的な挑戦者」</strong>と呼ばれるタイプ。頭の中では常に新しい可能性・アイデア・戦略が生成され続け、現実世界はその知的エネルギーを放出するフィールドとして認識される。</p>
-    <p style="margin-top:8px;">しかしENTP-Aは通常のENTP(-T)と大きく異なる。<strong>大胆さと鉄壁の安定感が共存する</strong>という、破壊力と不動の心を併せ持つ。情動安定性97%が「何があっても揺るがない」という構造的な強さを形成し、SLE-D × タイプ8w7が「即断即決で現実を動かす」行動力を生んでいる。</p>
-    <div class="data-grid" style="margin-top:12px;">
-      <div class="data-item"><strong>MBTI</strong><br>ENTP-A</div>
-      <div class="data-item"><strong>ソシオニクス</strong><br>SLE-D</div>
-      <div class="data-item"><strong>エニアグラム</strong><br>8w7</div>
-      <div class="data-item"><strong>情動安定性</strong><br>97%</div>
-    </div>
-  </div>
-
-  <h2>Ne主導が作る行動原理</h2>
-  <div class="card">
-    <p>Ne（外向直観）が主機能ということは、<strong>全ての状況が「まだ見ぬ可能性」というフィルターを通して処理される</strong>ということ。現状維持よりも、「ここからどう変えられるか」が常に最優先される。</p>
-    <h4 style="margin-top:12px;">Ne × SLE × タイプ8が作る矛盾構造</h4>
-    <ul>
-      <li>MBTI上のNe（可能性の爆発的生成）とソシオニクスのNe苦点（選択肢が広がると消耗）が同時に存在</li>
-      <li>アイデアを生むのは得意だが、選択肢に留まるとストレスになる → Neで生む、Tiで絞る、Seで動く、の3段階をミリ秒で回す</li>
-      <li>関心領域（What）は多様・流動的だが、関わり方（How）は独立・革新・挑戦で固定</li>
-      <li>「やっていることは変わるが、やり方は変わらない」——水瓶座不動宮 × タイプ8の不動の軸</li>
-      <li>勤勉性85%が「飽きっぽく見えて実は続く」ギャップを生む。信念レベルの軸はむしろ誰より固い</li>
-    </ul>
-  </div>
-
-  <h2>ENTPの理想と現実のギャップ</h2>
-  <div class="card">
-    <p>Ne+Tiの組み合わせは「より良いシステム・より面白い未来」を鮮明に構想する力を生む。しかしその構想は<strong>現実の制約を無視した理想像</strong>であることが多い。</p>
-    <div class="table-wrap"><table>
-      <tr><th>理想（Ne+Ti）</th><th>現実</th><th>ギャップの影響</th></tr>
-      <tr><td>全ての問題に革新的な解決策がある</td><td>世界は非合理と妥協で動いている</td><td>「なぜ誰もこうしないのか」という苛立ち</td></tr>
-      <tr><td>議論は知的な共同作業</td><td>多くの人は議論を攻撃と感じる</td><td>「論破する気はない」のに相手が傷つく</td></tr>
-      <tr><td>自分のルールで自由に動ける世界</td><td>組織・権威・ルールが存在する</td><td>「従え」に対する構造的な反発</td></tr>
-      <tr><td>常に新しい挑戦がある人生</td><td>安定・ルーティンも必要</td><td>「退屈 = 精神的な死」という焦燥感</td></tr>
-    </table></div>
-    <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">ただし情動安定性97%がこのギャップを「耐えられるレベル」に保っている。ENTP-Tなら皮肉と反発に消耗するところを、ENTP-Aは「まあ、自分でやればいい」と切り替えられる強さがある。</p>
-  </div>
-
-  <h2>「A」が与えるENTPへの影響</h2>
-  <div class="card gold">
-    <h4>ENTP-Aの情動安定97%は「三重の装甲」</h4>
-    <p>タイプ8の鎧 + 情動安定97%の麻酔 + ASC射手座の楽観的仮面。この三重構造が<strong>「揺れない」のではなく「揺れを感知しない」</strong>状態を生んでいる。</p>
-    <div class="table-wrap" style="margin-top:12px;"><table>
-      <tr><th>場面</th><th>ENTP-T</th><th>ENTP-A（自分）</th></tr>
-      <tr><td>批判を受けた時</td><td>皮肉で反撃し、内心で引きずる</td><td>「ふーん」で流す。傷ついていても気づかない</td></tr>
-      <tr><td>失敗した時</td><td>自尊心が揺れ、焦る</td><td>「次はこうする」と即切り替え。反省より行動</td></tr>
-      <tr><td>対立場面</td><td>攻撃的になりがち</td><td>冷静に論理で切る。感情は出ない</td></tr>
-      <tr><td>不確実な状況</td><td>焦りが言動に出る</td><td>「面白くなってきた」と楽しめる</td></tr>
-    </table></div>
-    <div class="danger-box" style="margin-top:12px;">
-      <div class="title">-Aの落とし穴</div>
-      <p style="font-size:12px;color:var(--text-muted);">安定感が高すぎるため、<strong>「本当に傷ついている自分」に気づくのが構造的に不可能に近い</strong>。鎧を脱ごうとする前に、鎧を着ていることすら自覚できない。周りが「大丈夫？」と聞いても、本心で「全然」と答えられてしまう。ASC射手座が「大丈夫そうな笑顔」を自動生成するため、周りも異変に気づけない。</p>
-    </div>
-  </div>
-
-  <h2>ENTPが陥りやすい5つのパターン</h2>
-
-  <details class="accordion">
-    <summary>1. 退屈恐怖と刺激中毒</summary>
-    <div class="acc-body">
-      <p>Ne主機能 + タイプ7ウィング + 創造性94%の三重圧が<strong>退屈 = 精神的な死</strong>という感覚を生む。停滞は存在価値の喪失に感じる。</p>
-      <p style="margin-top:8px;">健全な安定（良い習慣・長期の関係）まで「停滞している」と感じ、壊す方向に動いてしまう。「飽きた」の多くは対象の問題ではなくNeが刺激に飢えているだけ。恋愛では関係が安定すると「退屈」のラベルを貼りがち。長期雇用・定常業務は構造的に耐えられない。</p>
-      <p style="margin-top:8px;"><strong>対策</strong>: 外部から刺激を調達し続けるのではなく、内部から新しい視点を生み出す訓練。Neを「外に広げる」から「同じ対象を深く掘る」に切り替える練習が鍵。</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>2. 強さの鎧と感情の封印</summary>
-    <div class="acc-body">
-      <p>タイプ8の基本的恐怖は「弱さを見せること」。弱さを見せた瞬間、アイデンティティ（挑戦者・守る者）が崩れる。SLEのFiは役割機能（3番）= 苦手で消耗する。「傷つく」「悲しい」「寂しい」は<strong>存在してはならない感情</strong>。</p>
-      <p style="margin-top:8px;">97%の情動安定性は「揺れない」ではなく「揺れを感知しない」に近い。月双子座が感情を知的処理し、涙より先に言葉が来る。分析できた時点で感情は「解決済み」とラベルされるが、本当の消化に至らない。恋愛では「好き」の感覚すら深く感じ切れない。</p>
-      <p style="margin-top:8px;"><strong>対策</strong>: 鎧を「自力で脱ぐ」のは構造上ほぼ不可能。信頼できる相手の前で「外側から開けてもらう」形が必要。Fiを育てるには「感じる前に考える」を意識的に遅らせること。</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>3. 身体の限界への無自覚</summary>
-    <div class="acc-body">
-      <p>Siが構造上ダブルで弱い。MBTI上のSi劣等（4番・最弱）+ ソシオニクスのSi背景機能（8番・無意識下）。身体感覚・疲労・快適さのセンサーが<strong>二重に封じられている</strong>。</p>
-      <p style="margin-top:8px;">火星牡羊座4H（ドミサイル）が行動力を天文学的最大値まで供給。倒れない → まだいける → さらに動く、の無限ループ。97%の情動安定がSi信号を完全にブロックするため、限界は「気づく」ものではなく「突然来る」もの。タイプ5化（急に引きこもる・動けなくなる）が起きて初めて「やばかったのか」と気づく。</p>
-      <p style="margin-top:8px;"><strong>対策</strong>: 「気づけない」のではなく「気づく回路がそもそも細い」。定期的な強制リセット（睡眠・運動・医療チェック）をルーティンに組み込むしか対策がない。意志の問題ではなく構造の問題。</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>4. 論破と正論威圧</summary>
-    <div class="acc-body">
-      <p>Ne（主機能）が相手の発言の矛盾を即座に察知し、Ti（補助）が内的論理で検証。検出と同時に口が動いてしまう。タイプ8は直球・本音 →「違うと思ったら言う」がデフォルト。協調性78%があっても、<strong>腹の底のタイプ8が「言え」と命令する</strong>。</p>
-      <p style="margin-top:8px;">本人は「一緒に正しい答えに辿り着きたい」だけで、議論を知的な共同作業と捉えている。しかし受け手は「論破された」「否定された」と感じる。タイプ8の威圧感 + Ti的な鋭さが、優しいトーンでも刃物に感じられるため。LobeType「デビル天使」そのもの——天使側（協調性78%）と、デビル側（Ti+タイプ8）が同時発火し、相手は混乱する。</p>
-      <p style="margin-top:8px;"><strong>対策</strong>: 「同意しないけど、その視点は面白いね」の一言が切り替えスイッチ。Ti+タイプ8を「論破モード」から「共有モード」に。Fe第三機能を意図的に前に出す練習。</p>
-    </div>
-  </details>
-
-  <details class="accordion">
-    <summary>5. コントロール拒否と支配欲の逆説</summary>
-    <div class="acc-body">
-      <p>タイプ8の基本的欲求は「自分の運命を自分で握る」。コントロール・指示・命令はこの核心を直撃する。タイプ6最低（2）+ 水瓶座 + 天王星支配が、権威への服従を本能的・天体レベルで不可能にしている。</p>
-      <p style="margin-top:8px;">小さな指示にも過敏に反発するのは、「指示の内容」ではなく「支配構造の匂い」に反応しているから。相手に悪意がなくても、命令形式というだけで防御が発動。自分はリードしたい（タイプ8）のに自分が指示されるのは耐えられない、という逆説が生まれる。結果、自分がトップでない環境で構造的に消耗する。</p>
-      <p style="margin-top:8px;"><strong>対策</strong>: 「指示」ではなく「相談」「提案」の形なら通る。「こうしてくれる？」ではなく「これどう思う？」がタイプ8の防御を解くスイッチ。これは相手に求めるだけでなく、自分が指示を出す側でも意識すべきこと。</p>
-    </div>
-  </details>
-
-  <h2>ENTPの成長戦略</h2>
-  <div class="card green">
-    <h4>Ne+Tiの強みを活かしながら、Si+Fiを補強する</h4>
-    <ul>
-      <li><strong>Si劣等の補強</strong>: 身体の声を聞く練習。定期的な強制リセットをルーティンに組み込む。「疲れた」を認めることは弱さではなく知性</li>
-      <li><strong>Fiの育成</strong>: 「本当はどう感じているか」を自分に問いかける習慣。感情を論理で処理する前に、まず「感じる」ことを許す</li>
-      <li><strong>Neの建設的な活用</strong>: 可能性を広げるだけでなく、「深く掘る」方向にNeを使う練習。退屈恐怖を「新しい角度の発見」で昇華する</li>
-      <li><strong>Fe第三機能の意識的発動</strong>: 論破モードを検知したら「その視点は面白い」で共有モードに切り替える</li>
-      <li><strong>弱さの統合</strong>: タイプ8 → タイプ2への成長は「強さを手放す」ことではなく「強さの中に弱さを含める」こと。脆弱性は最大の強さになりうる</li>
-    </ul>
-  </div>
-
-  <h2>総括</h2>
-  <blockquote>
-    ENTP-Aは「鉄壁の安定を纏った知的挑戦者」。その鉄壁のおかげで世界と戦えるが、鉄壁の内側で蓄積する疲労と感情に気づくことを忘れてはいけない。Neの爆発的な可能性とTiの鋭い論理は最大の武器。それを「壊す力」だけでなく「つくる力」として使い続けることが、ENTPの成長の核心にある。
-  </blockquote>
-</div>
 <!-- =============== TAB: 向いてる仕事 =============== -->
 <div class="tab-content" id="career">
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>MBTI・ソシオニクス・エニアグラム・ビッグファイブ・ホロスコープの全データから、最も力を発揮できる職業と働き方を分析します。「向いている仕事」だけでなく「避けるべき環境」も明確にします。</p>
+    <p>MBTI・ソシオニクス・エニアグラム・ビッグファイブ・ホロスコープの全データから、最も力を発揮できる職業・働き方・避けるべき環境を分析します。</p>
   </div>
 
   <h2>適職分析の基盤</h2>
@@ -2052,7 +2358,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>全診断データから「無意識に惹かれるタイプ」と「本当に相性が良いタイプ」を分析します。惹かれる理由と相性が良い理由が異なることを構造的に解明します。</p>
+    <p>全診断データから「無意識に惹かれるタイプ」と「本当に相性が良いタイプ」の違いを構造的に分析します。</p>
   </div>
 
   <h2>無意識に惹かれるタイプ</h2>
@@ -2154,7 +2460,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>恋愛における行動パターン・コミュニケーション傾向・注意点を全診断データから統合分析します。恋愛の各段階で何が起きるかを具体的に読み解きます。</p>
+    <p>全診断データから恋愛における行動パターン・コミュニケーション傾向・注意点を統合し、恋愛の各段階で何が起きるかを具体的に分析します。</p>
   </div>
 
   <h2>恋愛の核心</h2>
@@ -2525,7 +2831,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>MBTI・エニアグラム・ソシオニクスの3理論からリーダーシップの「型」を特定します。どう人を動かし、どこで頼られ、どこで反感を買いやすいかまで分析します。</p>
+    <p>MBTI・エニアグラム・ソシオニクスの3理論からリーダーシップの「型」を特定し、人の動かし方や頼られるポイント・反感を買いやすい場面まで分析します。</p>
   </div>
 
   <h2>リーダーシップタイプ</h2>
@@ -2622,7 +2928,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>職場でのストレストリガーを危険度別にマッピングします。やる気が消える瞬間・燃え尽きるパターン・限界のサインを性格データから特定し、対処法まで提示します。</p>
+    <p>職場でのストレストリガーを危険度別にマッピングし、やる気が消える瞬間・燃え尽きるパターン・限界のサインと対処法を性格データから分析します。</p>
   </div>
 
   <h2>職場ストレストリガー（危険度別）</h2>
@@ -2713,7 +3019,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>ホロスコープの2ハウス（収入）と天体配置、MBTI・エニアグラムの意思決定スタイルから、あなたに最適な「お金との付き合い方」を分析します。</p>
+    <p>ホロスコープの2ハウス・8ハウス、MBTIの意思決定スタイル、エニアグラムの欲求構造から、最適な稼ぎ方・浪費パターン・お金に対する無意識のブロックまで総合的に分析します。</p>
   </div>
 
   <h2>お金の設計図</h2>
@@ -2809,7 +3115,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>全診断データを統合し、タイプ間の相性を多角的に分析します。強みと課題、コミュニケーションのコツがわかります。</p>
+    <p>全診断データを統合し、タイプ間の相性・強みと課題・コミュニケーションのコツを多角的に分析します。</p>
   </div>
 
   <div class="vs-row">
@@ -2988,7 +3294,7 @@ SLEのTi（得意）→ IEIのTi（求めている）</div>
 
   <div class="about-box">
     <div class="about-title">この診断でわかること</div>
-    <p>ENTJ×ENTPペアの仕事パートナーとしての相性と友情の構造を分析します。役割分担・相互補完・リスクと対策を多角的に解明します。</p>
+    <p>ENTJ×ENTPペアの仕事パートナーとしての相性・友情の構造・役割分担・相互補完・リスクと対策を多角的に分析します。</p>
   </div>
 
   <h2>仕事パートナー相性</h2>
